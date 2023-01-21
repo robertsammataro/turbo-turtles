@@ -72,6 +72,9 @@ export default class QuizScene extends Phaser.Scene {
 	quizStartTime?: Date
 	quizEndTime?: Date
 
+	//this is all just testing
+	private player?: Phaser.Physics.Arcade.Sprite;
+
 	constructor() {
 		super('hello-world')
 	}
@@ -79,6 +82,12 @@ export default class QuizScene extends Phaser.Scene {
 	preload() {
 
 		this.load.image('sky', 'assets/sky.png');
+
+		//testing
+		this.load.spritesheet('dude', 'assets/dude.png', {
+			frameWidth:32, frameHeight: 48
+		} );
+
 
 		this.load.image('answerBubble', 'assets/quiz/answer_bubble.png')
 		this.load.image('exitArrow', 'assets/quiz/exit_arrow')
@@ -103,8 +112,13 @@ export default class QuizScene extends Phaser.Scene {
 
 		this.background = this.add.image(400, 300, 'sky');
 
-		this.add.image(400, 500, 'placeholder')
+		//this.add.image(400, 500, 'placeholder')
 		this.add.image(400, 62, 'backdrop')
+
+		//this is a test
+		this.player = this.physics.add.sprite(0, 450, 'dude');
+		this.player.setCollideWorldBounds(true);
+
 
 		//Indicate what question the user is currently on
 		this.questionNumber = this.add.text(40, 15, "Question " + String(this.quizQuestionIndex + 1), {
@@ -269,6 +283,9 @@ export default class QuizScene extends Phaser.Scene {
 		this.totalPoints += this.awardedPoints
 		this.awardedPoints = 1000
 		this.quizScore?.setText(`Score: ${this.totalPoints}`)
+
+		//testing
+		this.player.x += 80;
 
 	}
 
