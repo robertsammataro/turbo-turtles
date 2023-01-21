@@ -9,3 +9,5 @@ This is our team repo for our Turbo Turtles game created in W23 HAWAII for CISC3
 
 
 **Abbey Walters:** Added beach background and sprite to main game scene. Sprite will move towards the ocean with every correct question answered. *currently working on creating lesson plans*
+
+**Himanshu Patel** Created the Title Screen which consists of a background image, turtle images, Game Title, and a Play Now button which switches scenes to the Quiz Scene. Created the Level One: Data Types Quiz Questions for the game. 
