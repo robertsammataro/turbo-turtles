@@ -84,6 +84,7 @@ export default class QuizScene extends Phaser.Scene {
 		this.load.image('exitArrow', 'assets/quiz/exit_arrow')
 		this.load.image('hintButton', 'assets/quiz/hint.png')
 		this.load.image('hintBubble', 'assets/quiz/hint_bubble.png')
+		this.load.image('longBubble', 'assets/quiz/button_wide.png')
 		this.load.image('correctAnswer', 'assets/quiz/answer_correct.png')
 		this.load.image('next', 'assets/quiz/next.png')
 		this.load.image('close', 'assets/quiz/close.png')
@@ -104,31 +105,28 @@ export default class QuizScene extends Phaser.Scene {
 		this.background = this.add.image(400, 300, 'sky');
 
 		this.add.image(400, 500, 'placeholder')
-		this.add.image(400, 62, 'backdrop')
+		this.add.image(400, 90, 'backdrop')
 
-		//Indicate what question the user is currently on
-		this.questionNumber = this.add.text(40, 15, "Question " + String(this.quizQuestionIndex + 1), {
-			font: '20px Arial',
-			color: '#000'
-		}) 
+		this.add.image(125, 50, 'longBubble')
+		this.add.image(300, 50, 'longBubble')
 
 		//Add the answer bubbles
-		this.answerBubble1 = this.add.image(200, 200, 'answerBubble')
-		this.answerBubble2 = this.add.image(200, 325, 'answerBubble')
-		this.answerBubble3 = this.add.image(600, 200, 'answerBubble')
-		this.answerBubble4 = this.add.image(600, 325, 'answerBubble')
+		this.answerBubble1 = this.add.image(200, 240, 'answerBubble')
+		this.answerBubble2 = this.add.image(200, 335, 'answerBubble')
+		this.answerBubble3 = this.add.image(600, 240, 'answerBubble')
+		this.answerBubble4 = this.add.image(600, 335, 'answerBubble')
 		this.answerBubble1.setInteractive()
 		this.answerBubble2.setInteractive()
 		this.answerBubble3.setInteractive()
 		this.answerBubble4.setInteractive()
 
 		//Add the answers to display on screen
-		this.answer1 = this.add.text(110, 185, this.currentQuestion.option1, {
+		this.answer1 = this.add.text(110, 215, this.currentQuestion.option1, {
 			font: '32px Arial',
-			color: '#000'
+			color: '#000',
 		}) 
 
-		this.answer2 = this.add.text(510, 185, this.currentQuestion.option2, {
+		this.answer2 = this.add.text(510, 215, this.currentQuestion.option2, {
 			font: '32px Arial',
 			color: '#000'
 		}) 
@@ -146,7 +144,7 @@ export default class QuizScene extends Phaser.Scene {
 		//Initialize hintBubble and hide it
 		this.hintBubble = this.add.image(400, 300, 'hintBubble').setVisible(false)
 
-		this.hintButton = this.add.image(750, 50, 'hintButton')
+		this.hintButton = this.add.image(710, 85, 'hintButton')
 		this.hintButton.setInteractive()
 		this.closeButton = this.add.image(500, 375, 'close').setVisible(false)
 		this.closeButton.setInteractive()
@@ -248,17 +246,21 @@ export default class QuizScene extends Phaser.Scene {
 
 		})
 
-		this.quizTitle = this.add.text(40, 40, this.currentQuestion.question, {
-			font: '32px Arial',
-			color: '#000'
+		//Indicate what question the user is currently on
+		this.questionNumber = this.add.text(58, 30, "Question " + String(this.quizQuestionIndex + 1), {
+			font: '28px Georgia',
+			color: '#000000'
 		}) 
 
-		
-
-		this.quizScore = this.add.text(400, 15, `Score: ${this.totalPoints}`, {
-			font: '20px Arial',
-			color: '#000'
+		this.quizScore = this.add.text(235, 33, `Score: ${this.totalPoints}`, {
+			font: '24px Georgia',
+			color: '#000000'
 		})
+
+		this.quizTitle = this.add.text(50, 75, this.currentQuestion.question, {
+			font: '32px Georgia',
+			color: '#000'
+		}) 
 
 	}
 
