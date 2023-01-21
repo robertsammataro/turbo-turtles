@@ -72,6 +72,10 @@ export default class QuizScene extends Phaser.Scene {
 	quizStartTime?: Date
 	quizEndTime?: Date
 
+	//this is all just testing
+	private player?: Phaser.Physics.Arcade.Sprite;
+	private platform?: Phaser.Physics.Arcade.StaticGroup;
+
 	constructor() {
 		super('hello-world')
 	}
@@ -79,6 +83,13 @@ export default class QuizScene extends Phaser.Scene {
 	preload() {
 
 		this.load.image('sky', 'assets/sky.png');
+
+		this.load.spritesheet('turtle', 'assets/beach/GreenSeaTurtle.png',{
+			frameWidth:70, frameHeight: 70
+		});
+		this.load.image('beach', 'assets/beach/beach.png');
+		this.load.image('platform', 'assets/platform.png');
+
 
 		this.load.image('answerBubble', 'assets/quiz/answer_bubble.png')
 		this.load.image('exitArrow', 'assets/quiz/exit_arrow')
@@ -103,8 +114,22 @@ export default class QuizScene extends Phaser.Scene {
 		this.currentQuestion = this.sampleQuiz.questions[this.quizQuestionIndex]
 
 		this.background = this.add.image(400, 300, 'sky');
+		this.add.image(400, 62, 'backdrop')
 
-		this.add.image(400, 500, 'placeholder')
+		this.platform = this.physics.add.staticGroup();
+		this.platform.create(400, 580, 'platform').setScale(2).refreshBody();
+		this.add.image(400, 500, 'beach');
+		this.player = this.physics.add.sprite(0, 450, 'turtle');
+		this.physics.add.collider(this.player, this.platform);
+		this.player.setCollideWorldBounds(true);
+
+
+		//Indicate what question the user is currently on
+		this.questionNumber = this.add.text(40, 15, "Question " + String(this.quizQuestionIndex + 1), {
+			font: '20px Arial',
+			color: '#000'
+		}) 
+
 		this.add.image(400, 90, 'backdrop')
 
 		this.add.image(125, 50, 'longBubble')
@@ -271,6 +296,8 @@ export default class QuizScene extends Phaser.Scene {
 		this.totalPoints += this.awardedPoints
 		this.awardedPoints = 1000
 		this.quizScore?.setText(`Score: ${this.totalPoints}`)
+
+		this.player.x += 56;
 
 	}
 
