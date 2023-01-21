@@ -78,17 +78,12 @@ export default class QuizScene extends Phaser.Scene {
 
 	constructor() {
 		super('hello-world')
-		//this.player = null;
 	}
 
 	preload() {
 
 		this.load.image('sky', 'assets/sky.png');
 
-		//testing
-		/*this.load.spritesheet('dude', 'assets/dude.png', {
-			frameWidth:32, frameHeight: 48
-		} );*/
 		this.load.spritesheet('turtle', 'assets/beach/GreenSeaTurtle.png',{
 			frameWidth:70, frameHeight: 70
 		});
@@ -119,16 +114,12 @@ export default class QuizScene extends Phaser.Scene {
 		this.currentQuestion = this.sampleQuiz.questions[this.quizQuestionIndex]
 
 		this.background = this.add.image(400, 300, 'sky');
-
-		//this.add.image(400, 500, 'placeholder')
 		this.add.image(400, 62, 'backdrop')
 
-		//this is a test
 		this.platform = this.physics.add.staticGroup();
 		this.platform.create(400, 580, 'platform').setScale(2).refreshBody();
 		this.add.image(400, 500, 'beach');
 		this.player = this.physics.add.sprite(0, 450, 'turtle');
-		//this.player = this.physics.add.sprite(10, 450, 'dude');
 		this.physics.add.collider(this.player, this.platform);
 		this.player.setCollideWorldBounds(true);
 
@@ -139,7 +130,6 @@ export default class QuizScene extends Phaser.Scene {
 			color: '#000'
 		}) 
 
-		//this.add.image(400, 500, 'placeholder')
 		this.add.image(400, 90, 'backdrop')
 
 		this.add.image(125, 50, 'longBubble')
@@ -307,7 +297,6 @@ export default class QuizScene extends Phaser.Scene {
 		this.awardedPoints = 1000
 		this.quizScore?.setText(`Score: ${this.totalPoints}`)
 
-		//testing
 		this.player.x += 56;
 
 	}
