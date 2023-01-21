@@ -2,6 +2,9 @@ import Phaser from 'phaser'
 
 import TitleScreen from './TitleScreen'
 import QuizScene from './QuizScene'
+import Lesson1Screen from './Lesson1Screen'
+import Lesson2Screen from './Lesson2Screen'
+import Lesson3Screen from './Lesson3Screen'
 
 const config: Phaser.Types.Core.GameConfig = {
 	type: Phaser.AUTO,
@@ -14,7 +17,7 @@ const config: Phaser.Types.Core.GameConfig = {
 			gravity: { y: 300 },
 		},
 	},
-	scene: [TitleScreen, QuizScene],
+	scene: [TitleScreen, Lesson1Screen, QuizScene, Lesson2Screen, Lesson3Screen],
 }
 
 export default new Phaser.Game(config)

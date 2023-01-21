@@ -31,7 +31,9 @@ export default class TitleScreen extends Phaser.Scene {
 
         // change to QuizScene on click
         this.playnowButton.on('pointerup', () => {
-            this.scene.start('QuizScene');
+            this.scene.start('Lesson1Screen');
+            //change this back!!!!
+            //this.scene.start('QuizScene');
 		})
     }
 
