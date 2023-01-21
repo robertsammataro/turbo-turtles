@@ -74,9 +74,11 @@ export default class QuizScene extends Phaser.Scene {
 
 	//this is all just testing
 	private player?: Phaser.Physics.Arcade.Sprite;
+	private platform?: Phaser.Physics.Arcade.StaticGroup;
 
 	constructor() {
 		super('hello-world')
+		//this.player = null;
 	}
 
 	preload() {
@@ -84,15 +86,21 @@ export default class QuizScene extends Phaser.Scene {
 		this.load.image('sky', 'assets/sky.png');
 
 		//testing
-		this.load.spritesheet('dude', 'assets/dude.png', {
+		/*this.load.spritesheet('dude', 'assets/dude.png', {
 			frameWidth:32, frameHeight: 48
-		} );
+		} );*/
+		this.load.spritesheet('turtle', 'assets/beach/GreenSeaTurtle.png',{
+			frameWidth:70, frameHeight: 70
+		});
+		this.load.image('beach', 'assets/beach/beach.png');
+		this.load.image('platform', 'assets/platform.png');
 
 
 		this.load.image('answerBubble', 'assets/quiz/answer_bubble.png')
 		this.load.image('exitArrow', 'assets/quiz/exit_arrow')
 		this.load.image('hintButton', 'assets/quiz/hint.png')
 		this.load.image('hintBubble', 'assets/quiz/hint_bubble.png')
+		this.load.image('longBubble', 'assets/quiz/button_wide.png')
 		this.load.image('correctAnswer', 'assets/quiz/answer_correct.png')
 		this.load.image('next', 'assets/quiz/next.png')
 		this.load.image('close', 'assets/quiz/close.png')
@@ -116,7 +124,12 @@ export default class QuizScene extends Phaser.Scene {
 		this.add.image(400, 62, 'backdrop')
 
 		//this is a test
-		this.player = this.physics.add.sprite(0, 450, 'dude');
+		this.platform = this.physics.add.staticGroup();
+		this.platform.create(400, 580, 'platform').setScale(2).refreshBody();
+		this.add.image(400, 500, 'beach');
+		this.player = this.physics.add.sprite(0, 450, 'turtle');
+		//this.player = this.physics.add.sprite(10, 450, 'dude');
+		this.physics.add.collider(this.player, this.platform);
 		this.player.setCollideWorldBounds(true);
 
 
@@ -126,23 +139,29 @@ export default class QuizScene extends Phaser.Scene {
 			color: '#000'
 		}) 
 
+		//this.add.image(400, 500, 'placeholder')
+		this.add.image(400, 90, 'backdrop')
+
+		this.add.image(125, 50, 'longBubble')
+		this.add.image(300, 50, 'longBubble')
+
 		//Add the answer bubbles
-		this.answerBubble1 = this.add.image(200, 200, 'answerBubble')
-		this.answerBubble2 = this.add.image(200, 325, 'answerBubble')
-		this.answerBubble3 = this.add.image(600, 200, 'answerBubble')
-		this.answerBubble4 = this.add.image(600, 325, 'answerBubble')
+		this.answerBubble1 = this.add.image(200, 240, 'answerBubble')
+		this.answerBubble2 = this.add.image(200, 335, 'answerBubble')
+		this.answerBubble3 = this.add.image(600, 240, 'answerBubble')
+		this.answerBubble4 = this.add.image(600, 335, 'answerBubble')
 		this.answerBubble1.setInteractive()
 		this.answerBubble2.setInteractive()
 		this.answerBubble3.setInteractive()
 		this.answerBubble4.setInteractive()
 
 		//Add the answers to display on screen
-		this.answer1 = this.add.text(110, 185, this.currentQuestion.option1, {
+		this.answer1 = this.add.text(110, 215, this.currentQuestion.option1, {
 			font: '32px Arial',
-			color: '#000'
+			color: '#000',
 		}) 
 
-		this.answer2 = this.add.text(510, 185, this.currentQuestion.option2, {
+		this.answer2 = this.add.text(510, 215, this.currentQuestion.option2, {
 			font: '32px Arial',
 			color: '#000'
 		}) 
@@ -160,7 +179,7 @@ export default class QuizScene extends Phaser.Scene {
 		//Initialize hintBubble and hide it
 		this.hintBubble = this.add.image(400, 300, 'hintBubble').setVisible(false)
 
-		this.hintButton = this.add.image(750, 50, 'hintButton')
+		this.hintButton = this.add.image(710, 85, 'hintButton')
 		this.hintButton.setInteractive()
 		this.closeButton = this.add.image(500, 375, 'close').setVisible(false)
 		this.closeButton.setInteractive()
@@ -262,17 +281,21 @@ export default class QuizScene extends Phaser.Scene {
 
 		})
 
-		this.quizTitle = this.add.text(40, 40, this.currentQuestion.question, {
-			font: '32px Arial',
-			color: '#000'
+		//Indicate what question the user is currently on
+		this.questionNumber = this.add.text(58, 30, "Question " + String(this.quizQuestionIndex + 1), {
+			font: '28px Georgia',
+			color: '#000000'
 		}) 
 
-		
-
-		this.quizScore = this.add.text(400, 15, `Score: ${this.totalPoints}`, {
-			font: '20px Arial',
-			color: '#000'
+		this.quizScore = this.add.text(235, 33, `Score: ${this.totalPoints}`, {
+			font: '24px Georgia',
+			color: '#000000'
 		})
+
+		this.quizTitle = this.add.text(50, 75, this.currentQuestion.question, {
+			font: '32px Georgia',
+			color: '#000'
+		}) 
 
 	}
 
@@ -285,7 +308,7 @@ export default class QuizScene extends Phaser.Scene {
 		this.quizScore?.setText(`Score: ${this.totalPoints}`)
 
 		//testing
-		this.player.x += 80;
+		this.player.x += 56;
 
 	}
 
