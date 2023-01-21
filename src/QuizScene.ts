@@ -87,7 +87,7 @@ export default class QuizScene extends Phaser.Scene {
 		this.load.spritesheet('turtle', 'assets/beach/GreenSeaTurtle.png',{
 			frameWidth:70, frameHeight: 70
 		});
-		this.load.image('beach', 'assets/beach/beach.png');
+		this.load.image('Gamebeach', 'assets/beach/beach.png');
 		this.load.image('platform', 'assets/platform.png');
 
 
@@ -118,7 +118,7 @@ export default class QuizScene extends Phaser.Scene {
 
 		this.platform = this.physics.add.staticGroup();
 		this.platform.create(400, 580, 'platform').setScale(2).refreshBody();
-		this.add.image(400, 500, 'beach');
+		this.add.image(400, 500, 'Gamebeach');
 		this.player = this.physics.add.sprite(0, 450, 'turtle');
 		this.physics.add.collider(this.player, this.platform);
 		this.player.setCollideWorldBounds(true);
