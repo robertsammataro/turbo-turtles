@@ -77,7 +77,7 @@ export default class QuizScene extends Phaser.Scene {
 	private platform?: Phaser.Physics.Arcade.StaticGroup;
 
 	constructor() {
-		super('hello-world')
+		super('QuizScene')
 	}
 
 	preload() {
