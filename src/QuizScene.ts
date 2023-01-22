@@ -78,7 +78,7 @@ export default class QuizScene extends Phaser.Scene {
 	questionHint?: Phaser.GameObjects.Text
 
 	constructor() {
-		super('QuizScene')
+		super({ key: 'QuizScene' })
 	}
 
 	preload() {
@@ -284,7 +284,7 @@ export default class QuizScene extends Phaser.Scene {
 
 				//Print out how long the puzzle took to solve
 				console.log((this.quizEndTime!.getTime() - this.quizStartTime!.getTime()) / 1000. + " seconds")
-
+				
 				///////////////////////////////////////////////////////////////
 				///															///
 				///			This is where the quiz engine exits				///
