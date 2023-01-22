@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
 
+import TitleScreen from './TitleScreen'
 import QuizScene from './QuizScene'
 
 const config: Phaser.Types.Core.GameConfig = {
@@ -13,7 +14,7 @@ const config: Phaser.Types.Core.GameConfig = {
 			gravity: { y: 300 },
 		},
 	},
-	scene: [QuizScene],
+	scene: [TitleScreen, QuizScene],
 }
 
 export default new Phaser.Game(config)
