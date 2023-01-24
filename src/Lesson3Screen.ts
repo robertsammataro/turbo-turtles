@@ -3,7 +3,7 @@ import Phaser from 'phaser'
 export default class Lesson3Screen extends Phaser.Scene {
 
     background?:Phaser.GameObjects.Image
-    skipButton?: Phaser.GameObjects.Image
+    completeButton?: Phaser.GameObjects.Image
 
     constructor() 
     {
@@ -32,12 +32,12 @@ export default class Lesson3Screen extends Phaser.Scene {
         this.add.text(250, 305, 'Examples --> THERE WILL BE PICTURES', { font: "bold 25px Arial", color: "black"});
         this.add.text(250, 335, 'If (it\'s raining) Then: We bring an umbrella\nIf (it\'s cold) Then: We bring a jacket', { font: "20px Arial", color: "black"});
         this.add.text(250, 470, 'Whatever comes after \'If\' must be true, before we\ncomplete the action after it', { font: "20px Arial", color: "black"});
-        this.skipButton = this.add.image(700, 565, 'skip');
-        this.add.text(645, 550, 'Skip Lesson', { font: "bold 20px Arial", color: "black"});
-        this.skipButton.setInteractive();
+        this.completeButton = this.add.image(700, 565, 'skip');
+        this.add.text(645, 550, 'Complete', { font: "bold 20px Arial", color: "black"});
+        this.completeButton.setInteractive();
 
         //on click change to game scene 
-        this.skipButton.on('pointerup', () => {
+        this.completeButton.on('pointerup', () => {
             this.scene.start('QuizScene');
         })
 
