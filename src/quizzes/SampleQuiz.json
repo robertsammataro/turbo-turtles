@@ -1,0 +1,38 @@
+export class SampleQuiz() {
+
+    let sampleQuiz = {
+
+        title: "Sample Quiz",
+        description: "Short one-sentence description",
+        lesson_slides: ["sample_file_path_1", "sample_file_path_2"],
+        questions:[{
+            question: "This is the first question",
+            hint: "This is the provided hint",
+            option1: "Answer",
+            option2: "Not the answer",
+            option3: "Not the answer",
+            option4: "Not the answer",
+            solution: 1
+        }, {
+            question: "This is the second question",
+            hint: "This is the provided hint",
+            option1: "Answer",
+            option2: "Not the answer",
+            option3: "Not the answer",
+            option4: "Not the answer",
+            solution: 1
+        }, {
+            question: "This is the third question",
+            hint: "This is the provided hint",
+            option1: "Answer",
+            option2: "Not the answer",
+            option3: "Not the answer",
+            option4: "Not the answer",
+            solution: 1
+        }]
+    
+    
+    }
+
+}
+
