@@ -28,7 +28,14 @@ export default class Lesson1Screen extends Phaser.Scene {
         this.add.image(500, 425, 'whiteboard');
         //35 characters long left --> right
         //11 up to down  
-        this.add.text(250, 200, 'TESTING', { font: "bold 25px Arial", color: "black"});
+        //this.add.text(250, 200, '12345678910121314151617181920303132333435', { font: "bold 25px Arial", color: "black"});
+        this.add.text(250, 200, 'Data Types are ways to label the things\nthat we use to tell the computer instructions', { font: " 25px Arial", color: "black"});
+        //this.add.text(250, 225, 'There are many different types of data\ntypes we\'re going to learn about only a few today', { font: " 25px Arial", color: "black"});
+        this.add.text(250, 255, 'Numbers, Strings, Booleans, Arrays', { font: "bold 25px Arial", color: "black"});
+        this.add.text(250, 280, 'Numbers are just what you think they are!\n\tEx: 10', { font: " 25px Arial", color: "black"});
+        this.add.text(250, 330, 'Strings are a collection of words/characters\n\tEx: a Name', { font: " 25px Arial", color: "black"});
+        this.add.text(250, 380, 'Booleans can only be true or false\n\tEx: True or False: You have brown hair', { font: " 25px Arial", color: "black"});
+        this.add.text(250, 430, 'Arrays are lists of the same data type.\n\tEx: A collection of pencils', { font: " 25px Arial", color: "black"});
         this.skipButton = this.add.image(700, 565, 'skip');
         this.add.text(645, 550, 'Skip Lesson', { font: "bold 20px Arial", color: "black"});
         this.skipButton.setInteractive();
