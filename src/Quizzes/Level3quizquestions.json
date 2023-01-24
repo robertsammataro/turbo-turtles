@@ -1,0 +1,88 @@
+{
+    "title": "Lesson 3 Quiz",
+    "description": "This is the quiz that focuses on conditionals/if statements",
+    "lesson_slides": ["sample_file_path_1", "sample_file_path_2"],
+    "questions": [{
+        "question": "X=5 Y=2, \n if X > Y \n print('True') \n else \n print('False')\n What will be printed?",
+        "hint": "We are here to help! Let's remember our 1,2,3's! If 5 bigger than 2, then we click 'True'. Remember, a number is bigger than another number if it comes after a number. Let's count! 1 , 2 , 3 , 4 , 5! Since 2 is after 1, that means it is bigger. So let's go back to the question & think 'is 5 bigger than 2' if it is, click true",
+        "option1": "True",
+        "option2": "False",
+        "option3": "Error!",
+        "option4": "Not enough informatio",
+        "solution": 1
+    }, {
+        "question2": "X=10 Y=7, \n if X<10 \n print('True'), else \n print('False)\n What will be printed?",
+        "hint":  "We are here to help! A number is bigger than another number if it comes after the number before it. For example, let's count to 5! Are you ready? 1 , 2, 3 , 4 , 5! The number 3 is bigger than the number 2 because it came after it. \n Now let's go back to the question and first count to 10! Then ask yourself 'does the number 10 come before or after 7? if it comes before then it is less than 7, but if it comes after then it is greater than 7'Good Luck! ",
+        "option1": "False",
+        "option2": "True",
+        "option3": "Not enough information!",
+        "option4": "Error!",
+        "solution": 1
+    }, {
+        "question3": "If 'dog' in 'It is raining!' \n then print('1') \n else print('2')\n What will be printed?",
+        "hint":  "We are here to help! Let's look at the sentence 'It is raining'. In that sentence does the word 'dog' show? If it does then it will print out 1, if it does not it will print out 2! Good luck! ",
+        "option1": "1",
+        "option2": "2",
+        "option3": "3",
+        "option4": "4",
+        "solution": 2
+    }, {
+        "question4": "If 'Cats' in 'Cats are cool!' \n print(1) \n else, print(2)",
+        "hint":  "We are here to help! Let's look at the sentence 'Cats are cool!'. In that sentence does the word 'Cats' show? If it does, then it will print out 1, if it does not it will print out 2! Good luck!",
+        "option1": "1",
+        "option2": "2",
+        "option3": "3",
+        "option4": "4",
+        "solution": 1
+    }, {
+        "question5": "Weather = 'Rainy' \n If Weather=='Rainy', print('Stay in & watch a movie')\n else print('Play Outside')",
+        "hint":  "We are here to help! Remember in our lesson '==' means equal to, that means, both sides of the '==' must be the same. If they are the same they print out the first expression, if the are not the same they print out the next expression! So, lets go back to the question! We assigned weather to be Rainy, does Rainy == Rainy? If it does then it will print out the first expression, if it does not it will print out the second expression! Good Luck!!",
+        "option1": "Have a picnic!",
+        "option2": "Play outside!",
+        "option3": "Dance in the rain!",
+        "option4": "Stay in & watch a movie",
+        "solution": 4
+    }, {
+        "question6": "Class = 'Math'\n If Class=='Gym' print('change clothes')\n else print('Put your thinking cap on!')\n What will be printed?",
+        "hint":  "We are here to help! Remember in our lesson '==' means equal to, that means, both sides of the '==' must be the same. If they are the same they print out the first expression, if they are not the same they print out the next expresstion!\n So, lets go back to the question! We assigned Class to be Math, does Gym == Math? If it does then it will print out the first expression, if it does not it will print out the second expression! Good Luck!!",
+        "option1": "Change clothes",
+        "option2": "Science Experiment!",
+        "option3": "Put your thinking cap on!",
+        "option4": "Lunch Time!",
+        "solution": 3
+    }, {
+        "question7": "A=5\nB=5\n Does A==B?",
+        "hint":  "We are here to help! Remember in our lesson '==' means equal to, that means, both sides of the '==' must be the same\n So, lets go back to the question! We assigned A to equal 5, so replace'A' with 5. We assigned B to equal 5,so replace 'B' with 5 does 5 == 5? If it does then this expression is true, if it does not then this expression is false! Good Luck!!",
+        "option1": "True",
+        "option2": "False",
+        "option3": "Error!",
+        "option4": " Not enough information!",
+        "solution": 1
+    }, {
+        "question8": "How would you write the following expression:\n'A is less than or equal to B'",
+        "hint": "We are here to help! In math this sign: '<', means 'less than' and this sign: '>', means 'greater than'. So, let's go back to our question and ask yourself,'Which sign goes with the expression?'Good Luck!",
+        "option1": "A>B",
+        "option2": "B<A",
+        "option3": "B<=A",
+        "option4": "A<=B",
+        "solution": 4
+    }, {
+        "question9": "How would you write the following expression:\n'A does not equal to B'",
+        "hint":  "We are here to help! In math this sign: '<', means 'less than'; this sign: '>', means 'greater than'; this sign: '=' means equal. When you think of the sign for the word 'dont' you probably think of a big red circle with an x going through it! Sadly, we do not have that sign on our keyboards, so we use '!' as a 'does not' sign. Isn't that cool?! So, let's go back to our question and ask yourself,'Which sign goes with the expression?'Good Luck!",
+        "option1": "A>B",
+        "option2": "A!=B",
+        "option3": "B<=A",
+        "option4": "A<=B",
+        "solution": 2
+    }, {
+        "question10": "How would you write the following expression:\n'If the word 'You' is in 'You did it!', print ('Yay'), else print ('Try Again!') ",
+        "hint":  "We are here to help! This one is a tough one! Computers can not understand the english language completely Good Luck!",
+        "option1": "A>B",
+        "option2": "A!=B",
+        "option3": "B<=A",
+        "option4": "A<=B",
+        "solution": 2
+    }]
+
+
+}
