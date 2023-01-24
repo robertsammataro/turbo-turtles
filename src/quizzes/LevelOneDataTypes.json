@@ -1,0 +1,86 @@
+{
+    "title": "Data Types",
+    "description": "This level will test your knowledge on data types in Python.",
+    "lesson_slides": ["sample_file_path_1", "sample_file_path_2"],
+    "questions": [{
+        "question": "What is this data type:  x = 5 ",
+        "hint":  "The value of variable x is a whole number.",
+        "option1": "Integer",
+        "option2": "String",
+        "option3": "Boolean",
+        "option4": "Float",
+        "solution": 1
+    }, {
+        "question": "What is this data type:  x = 2.1 ",
+        "hint":  "The value of variable x is a decimal number.",
+        "option1": "Integer",
+        "option2": "String",
+        "option3": "Boolean",
+        "option4": "Float",
+        "solution": 4
+    }, {
+        "question": "What is this data type:  x = 'hello' ",
+        "hint":  "The value of variable x contains only letters.",
+        "option1": "Integer",
+        "option2": "String",
+        "option3": "Boolean",
+        "option4": "Float",
+        "solution": 2
+    }, {
+        "question": "What is this data type:  x = True ",
+        "hint":  "The value of variable x is True.",
+        "option1": "Integer",
+        "option2": "String",
+        "option3": "Boolean",
+        "option4": "Float",
+        "solution": 3
+    }, {
+        "question": "What is this data type:  x = ['apple', 'banana', 'apple'] ",
+        "hint":  "The variable x stores multiple items with duplicate vlaues.",
+        "option1": "String",
+        "option2": "List",
+        "option3": "Set",
+        "option4": "Dictionary",
+        "solution": 2
+    }, {
+        "question": "What is this data type:  x = {'name' : 'John', 'age' : 36} ",
+        "hint":  "The variable x stores data values in key:value pairs.",
+        "option1": "List",
+        "option2": "Set",
+        "option3": "Dictionary",
+        "option4": "Tuple",
+        "solution": 3
+    }, {
+        "question": "What is this data type:  x = {'apple', 'banana', 'cherry'} ",
+        "hint":  "The variable x stores multiple items without duplicate values. Curly brackets.",
+        "option1": "List",
+        "option2": "Set",
+        "option3": "Dictionary",
+        "option4": "Tuple",
+        "solution": 2
+    }, {
+        "question": "What is this data type:  x = ('apple', 'banana', 'cherry') ",
+        "hint":  "The variable x stores multiple items in a single variable which are ordered and unchangeable. Round brackets.",
+        "option1": "List",
+        "option2": "Set",
+        "option3": "Dictionary",
+        "option4": "Tuple",
+        "solution": 4
+    }, {
+        "question": "What is this data type:  x = '5.7' ",
+        "hint":  "The value of variable x is surrounded with quotation marks.",
+        "option1": "String",
+        "option2": "Integer",
+        "option3": "Float",
+        "option4": "Boolean",
+        "solution": 1
+    }, {
+        "question": "What is this data type:  x = false",
+        "hint":  "The value of variable x is False.",
+        "option1": "String",
+        "option2": "Integer",
+        "option3": "Float",
+        "option4": "Boolean",
+        "solution": 4
+    }]
+}
