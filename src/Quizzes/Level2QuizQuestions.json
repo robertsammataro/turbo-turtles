@@ -1,0 +1,88 @@
+{
+    "title": "Lesson 2 Quiz",
+    "description": "This is the quiz that focuses on indices",
+    "lesson_slides": ["lesson2Screen"],
+    "questions": [{
+        "question": "What number do computers start counting at?",
+        "hint": "",
+        "option1": "1",
+        "option2": "0",
+        "option3": "2",
+        "option4": "3",
+        "solution": 2
+    }, {
+        "question2": "How do we find the first element in an array?",
+        "hint":  "",
+        "option1": "arr[0]",
+        "option2": "arr[1]",
+        "option3": "arr[2]",
+        "option4": "arr[3]",
+        "solution": 1
+    }, {
+        "question3": "What color is the dot at arr[4]",
+        "hint":  "",
+        "option1": "",
+        "option2": "",
+        "option3": "",
+        "option4": "",
+        "solution": 3
+    }, {
+        "question4": "Given the array [1, 2, 3, 4], what is at arr[2]",
+        "hint":  "",
+        "option1": "1",
+        "option2": "2",
+        "option3": "3",
+        "option4": "4",
+        "solution": 3
+    }, {
+        "question5": "Given the array [1, 2, 3, 4], how do we find the last element?",
+        "hint":  "",
+        "option1": "arr[0]",
+        "option2": "arr[1]",
+        "option3": "arr[2]",
+        "option4": "arr[3]",
+        "solution": 4
+    }, {
+        "question6": "",
+        "hint":  "",
+        "option1": "",
+        "option2": "",
+        "option3": "",
+        "option4": "",
+        "solution": 3
+    }, {
+        "question7": "",
+        "hint":  "",
+        "option1": "",
+        "option2": "",
+        "option3": "",
+        "option4": "",
+        "solution": 1
+    }, {
+        "question8": "",
+        "hint": "",
+        "option1": "",
+        "option2": "",
+        "option3": "",
+        "option4": "",
+        "solution": 4
+    }, {
+        "question9": "",
+        "hint":  "",
+        "option1": "",
+        "option2": "",
+        "option3": "",
+        "option4": "",
+        "solution": 2
+    }, {
+        "question10": "",
+        "hint":  "",
+        "option1": "",
+        "option2": "",
+        "option3": "",
+        "option4": "",
+        "solution": 2
+    }]
+
+
+}
