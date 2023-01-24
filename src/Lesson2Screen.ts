@@ -23,7 +23,7 @@ export default class Lesson2Screen extends Phaser.Scene {
     {
         this.background = this.add.image(400, 300, 'beach');
         this.add.image(400, 62, 'topBanner');
-        this.add.text(175, 40, 'Lesson 1: Data Types', { font: "bold 40px Arial", color: "white"});
+        this.add.text(175, 40, 'Lesson 2: Indices', { font: "bold 40px Arial", color: "white"});
         this.add.image(110, 450, 'teacherTurtle');
         this.add.image(500, 425, 'whiteboard');
         this.skipButton = this.add.image(700, 565, 'skip');
