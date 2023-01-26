@@ -42,7 +42,8 @@ export default class Lesson1Screen extends Phaser.Scene {
 
         //on click change to game scene 
         this.completeButton.on('pointerup', () => {
-            this.scene.start('QuizScene');
+            //this.scene.start('QuizScene');
+            this.scene.start('GameScene');
         })
 
     }
