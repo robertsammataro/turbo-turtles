@@ -46,7 +46,7 @@ export default class GameScene extends Phaser.Scene {
 	private quizQuestionIndex = -1		//Defaults to -1, will be set to 0 once the quiz starts
 	private currentQuestion = {			//Will be used to contain the current question
 		question: '',
-		hint: '',
+		predator: '',
 		option1: '',
 		option2: '',
 		option3: '',
@@ -73,10 +73,13 @@ export default class GameScene extends Phaser.Scene {
 	answer3?: Phaser.GameObjects.Text
 	answer4?: Phaser.GameObjects.Text
 	questionNumber?: Phaser.GameObjects.Text
-	quizScore?: Phaser.GameObjects.Text
+	quizHealth?: Phaser.GameObjects.Text
 	quizStartTime?: Date
 	quizEndTime?: Date
     questionHint?: Phaser.GameObjects.Text
+
+	selectedOption: string = ""
+	currentEnemy?: Phaser.GameObjects.Image;
 
     //Abbey's Code: 
     background?: Phaser.GameObjects.Image;
@@ -84,6 +87,10 @@ export default class GameScene extends Phaser.Scene {
     private platform?: Phaser.Physics.Arcade.StaticGroup;
     private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
     private obstacles?: Phaser.Physics.Arcade.Group;
+	currentHidingSpot?: Phaser.GameObjects.Image;
+	beginAnimation?: boolean;
+	currentKeyframe?: string;
+	
 
     constructor() 
     {
@@ -113,6 +120,16 @@ export default class GameScene extends Phaser.Scene {
 
 		this.load.image('placeholder', 'assets/quiz/placeholder.png')
 		this.load.image('backdrop', 'assets/quiz/backdrop.png')
+
+		this.load.image('bird', 'assets/enemies/bird.jpg')
+		this.load.image('crab', 'assets/enemies/crab.jpg')
+		this.load.image('mongoose', 'assets/enemies/mongoose.jpg')
+		this.load.image('slug', 'assets/enemies/slug.jpg')
+
+		this.load.image('eat', 'assets/hiding/eat.jpg')
+		this.load.image('log', 'assets/hiding/log.jpg')
+		this.load.image('sand', 'assets/hiding/sand.jpg')
+		this.load.image('shell', 'assets/hiding/shell.jpg')
 	}
 
     create()
@@ -162,7 +179,7 @@ export default class GameScene extends Phaser.Scene {
 			color: '#000000'
 		}).setVisible(false).setScrollFactor(0);  
 
-		this.quizScore = this.add.text(240, 108, `Score: ${this.totalPoints}`, {
+		this.quizHealth = this.add.text(240, 108, `Health: ${this.totalPoints}`, {
 			font: '24px Georgia',
 			color: '#000000'
 		}).setVisible(false).setScrollFactor(0);
@@ -212,12 +229,6 @@ export default class GameScene extends Phaser.Scene {
 		this.hintBubble = this.add.image(400, 350, 'hintBubble').setVisible(false).setScrollFactor(0)
 		this.hintBubble.setInteractive()
 
-		this.questionHint = this.add.text(400, 300, this.currentQuestion.hint, {
-			font: '32px Arial',
-			color: '#000'
-		}).setOrigin(0.5).setVisible(false).setScrollFactor(0)
-		this.questionHint.setVisible(false)
-
 		this.closeButton = this.add.image(550, 440, 'close').setVisible(false).setScrollFactor(0)
 		this.closeButton.setInteractive()
 
@@ -240,7 +251,8 @@ export default class GameScene extends Phaser.Scene {
 		//Controls what happens when an answer bubble is selected:
 		this.answerBubble1.on('pointerup', () => {
 			if (this.currentQuestion.solution === 1) {
-				this.handleCorrectAnswer()
+				this.selectedOption = this.currentQuestion.option1
+				this.postQuestionScene()
 			} else {
 				this.handleIncorrectAnswer()
 			}
@@ -248,7 +260,8 @@ export default class GameScene extends Phaser.Scene {
 
 		this.answerBubble2.on('pointerup', () => {
 			if (this.currentQuestion.solution === 2) {
-				this.handleCorrectAnswer()
+				this.selectedOption = this.currentQuestion.option1
+				this.postQuestionScene()
 			} else {
 				this.handleIncorrectAnswer()
 			}
@@ -256,7 +269,8 @@ export default class GameScene extends Phaser.Scene {
 
 		this.answerBubble3.on('pointerup', () => {
 			if (this.currentQuestion.solution === 3) {
-				this.handleCorrectAnswer()
+				this.selectedOption = this.currentQuestion.option1
+				this.postQuestionScene()
 			} else {
 				this.handleIncorrectAnswer()
 			}
@@ -264,7 +278,8 @@ export default class GameScene extends Phaser.Scene {
 
 		this.answerBubble4.on('pointerup', () => {
 			if (this.currentQuestion.solution === 4) {
-				this.handleCorrectAnswer()
+				this.selectedOption = this.currentQuestion.option1
+				this.postQuestionScene()
 			} else {
 				this.handleIncorrectAnswer()
 			}
@@ -273,30 +288,6 @@ export default class GameScene extends Phaser.Scene {
 		this.nextButton.on('pointerup', () => {
 			this.correctBubble?.setVisible(false)
 			this.nextButton?.setVisible(false)
-
-			this.quizQuestionIndex++;
-
-			if(this.quizQuestionIndex < this.quiz1.length) {
-				this.currentQuestion = this.quiz1[this.quizQuestionIndex]
-				this.quizTitle?.setText(this.currentQuestion.question)
-				this.answer1?.setText(this.currentQuestion.option1)
-				this.answer2?.setText(this.currentQuestion.option2)
-				this.answer3?.setText(this.currentQuestion.option3)
-				this.answer4?.setText(this.currentQuestion.option4)
-				this.questionNumber?.setText("Question " + String(this.quizQuestionIndex + 1))
-			} else {
-
-				this.quizEndTime = new Date()
-				//Print out how long the puzzle took to solve
-				console.log((this.quizEndTime!.getTime() - this.quizStartTime!.getTime()) / 1000. + " seconds")
-				
-				///////////////////////////////////////////////////////////////
-				///															///
-				///			This is where the quiz engine exits				///
-				///															///
-				///////////////////////////////////////////////////////////////
-
-			}
 
 		})
 
@@ -310,6 +301,101 @@ export default class GameScene extends Phaser.Scene {
         
     }
 
+	private postQuestionScene() {
+
+		//Hide the question dialogs!
+		this.quizBubble?.setVisible(false)
+        this.questionNumber?.setVisible(false);
+        this.quizHealth?.setVisible(false);
+        this.quizTitle?.setVisible(false);
+        this.answerBubble1?.setVisible(false);
+        this.answerBubble2?.setVisible(false);
+        this.answerBubble3?.setVisible(false);
+        this.answerBubble4?.setVisible(false);
+        this.hintButton?.setVisible(false);
+        this.questionHint?.setVisible(false);
+        this.answer1?.setVisible(false);
+        this.answer2?.setVisible(false);
+        this.answer3?.setVisible(false);
+        this.answer4?.setVisible(false);
+
+		let hidingPlaceName = ""
+		
+		//Set what the turtle should turn into
+		if(this.selectedOption === "Hide in Log") {
+			hidingPlaceName = "log"
+		} else if (this.selectedOption === "Hide in Sand") {
+			hidingPlaceName = "sand"
+		} else if (this.selectedOption === "Hide in Shell") {
+			hidingPlaceName = "shell"
+		} else if (this.selectedOption === "Eat it") {
+			hidingPlaceName = "eat"
+		} else {
+
+		}
+
+		
+
+		
+
+		if(this.player) {
+
+			this.player.setVisible(false)
+			this.currentHidingSpot = this.add.image(this.player.x, this.player.y, hidingPlaceName)
+			
+			//Set what keyframe to start at
+			if(this.currentQuestion.predator === "bird") {
+				this.currentEnemy = this.add.image(this.player.x - 450, 100, this.currentQuestion.predator)
+				this.currentKeyframe = "birdPassover1"
+			} else if (this.currentQuestion.predator === "mongoose") {
+				this.currentEnemy = this.add.image(this.player.x - 450, 500, this.currentQuestion.predator)
+				this.currentKeyframe = "mongoosePassover1"
+			} else if (this.currentQuestion.predator === "crab") {
+				this.currentEnemy = this.add.image(this.player.x - 450, 500, this.currentQuestion.predator)
+				this.currentKeyframe = "crabPassover1"
+			} else if (this.currentQuestion.predator === "slug") {
+				this.currentEnemy = this.add.image(this.player.x + 450, this.player.y, this.currentQuestion.predator)
+				this.currentKeyframe = "slugPassover1"
+			}
+			
+			
+			this.beginAnimation = true
+
+		}
+		
+		
+
+	}
+
+	private advanceQuestions() {
+
+		this.quizQuestionIndex++;
+
+		if(this.quizQuestionIndex < this.quiz1.length) {
+			this.currentQuestion = this.quiz1[this.quizQuestionIndex]
+			this.quizTitle?.setText(this.currentQuestion.question)
+			this.answer1?.setText(this.currentQuestion.option1)
+			this.answer2?.setText(this.currentQuestion.option2)
+			this.answer3?.setText(this.currentQuestion.option3)
+			this.answer4?.setText(this.currentQuestion.option4)
+			this.questionNumber?.setText("Question " + String(this.quizQuestionIndex + 1))
+		} else {
+
+			this.quizEndTime = new Date()
+			//Print out how long the puzzle took to solve
+			console.log((this.quizEndTime!.getTime() - this.quizStartTime!.getTime()) / 1000. + " seconds")
+			
+			///////////////////////////////////////////////////////////////
+			///															///
+			///			This is where the quiz engine exits				///
+			///															///
+			///////////////////////////////////////////////////////////////
+
+		}
+
+
+	}
+
     private handleCollideObstacles(player: Phaser.GameObjects.GameObject, obstacle: Phaser.GameObjects.GameObject){
         //console.log(this.cameras.main.worldView.x);
         const obstacle2 = obstacle as Phaser.Physics.Arcade.Image;
@@ -320,7 +406,7 @@ export default class GameScene extends Phaser.Scene {
             this.quizBubble?.setVisible(true)
             //this.closeButton?.setVisible(true)
             this.questionNumber?.setVisible(true);
-            this.quizScore?.setVisible(true);
+            this.quizHealth?.setVisible(true);
             this.quizTitle?.setVisible(true);
             this.answerBubble1?.setVisible(true);
             this.answerBubble2?.setVisible(true);
@@ -341,12 +427,12 @@ export default class GameScene extends Phaser.Scene {
 		this.nextButton?.setVisible(true)
 		this.totalPoints += this.awardedPoints
 		this.awardedPoints = 1000
-		this.quizScore?.setText(`Score: ${this.totalPoints}`)
+		this.quizHealth?.setText(`Health: ${this.totalPoints}`)
 
         this.quizBubble?.setVisible(false)
         //this.closeButton?.setVisible(true)
         this.questionNumber?.setVisible(false);
-        this.quizScore?.setVisible(false);
+        this.quizHealth?.setVisible(false);
         this.quizTitle?.setVisible(false);
         this.answerBubble1?.setVisible(false);
         this.answerBubble2?.setVisible(false);
@@ -360,6 +446,8 @@ export default class GameScene extends Phaser.Scene {
         this.answer4?.setVisible(false);
 		//this.player!.x += 56;
 
+		
+
 	}
 
 	handleIncorrectAnswer() {
@@ -369,6 +457,15 @@ export default class GameScene extends Phaser.Scene {
 		if(this.awardedPoints > 100) {
 			this.awardedPoints -= 100
 		}
+	}
+
+	private resumeGameplay() {
+
+		this.currentEnemy?.setVisible(false)
+		this.currentHidingSpot?.setVisible(false)
+		this.player?.setVisible(true)
+		this.advanceQuestions()
+
 	}
 
     update()
@@ -392,6 +489,78 @@ export default class GameScene extends Phaser.Scene {
 			this.player.setVelocityY(-330);
 		}
         
+		//Handle the animations for the enemies
+		if(this.currentEnemy && this.beginAnimation && this.player) {
+
+			if(this.currentKeyframe === "birdPassover1") {
+
+				if(this.currentEnemy.x < (this.player.x + 450)) {
+					this.currentEnemy.setX(this.currentEnemy.x += 4)
+				} else {
+					console.log("done")
+					this.currentKeyframe = "birdPassover2"
+				}
+
+			}
+
+			if(this.currentKeyframe === "birdPassover2") {
+
+				if(this.currentEnemy.x > this.player.x - 450) {
+					this.currentEnemy.setX(this.currentEnemy.x -= 4)
+				} else {
+					this.beginAnimation = false
+					this.resumeGameplay()
+					console.log("done")
+				}
+			}
+
+			if(this.currentKeyframe === "mongoosePassover1") {
+
+				if(this.currentEnemy.x < (this.player.x + 450)) {
+					this.currentEnemy.setX(this.currentEnemy.x += 4)
+				} else {
+					console.log("done")
+					this.currentKeyframe = "mongoosePassover2"
+				}
+
+			}
+
+			if(this.currentKeyframe === "mongoosePassover2") {
+
+				if(this.currentEnemy.x > this.player.x - 450) {
+					this.currentEnemy.setX(this.currentEnemy.x -= 4)
+				} else {
+					this.beginAnimation = false
+					this.resumeGameplay()
+					console.log("done")
+				}
+			}
+
+			if(this.currentKeyframe === "crabPassover1") {
+
+				if(this.currentEnemy.x < (this.player.x + 450)) {
+					this.currentEnemy.setX(this.currentEnemy.x += 2)
+				} else {
+					console.log("done")
+					this.beginAnimation = false
+					this.resumeGameplay()
+				}
+
+			}
+
+			if(this.currentKeyframe === "slugPassover1") {
+
+				if(this.currentEnemy.x > (this.player.x)) {
+					this.currentEnemy.setX(this.currentEnemy.x -= 1)
+				} else {
+					console.log("done")
+					this.beginAnimation = false
+					this.resumeGameplay()
+				}
+
+			}
+
+		}
 
     }
 
