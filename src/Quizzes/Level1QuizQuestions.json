@@ -1,0 +1,48 @@
+{
+    "title": "Lesson 1 Quiz",
+    "description": "This is the quiz that focuses on data types",
+    "lesson_slides": ["sample_file_path_1", "sample_file_path_2"],
+    "questions": [{
+        "question": "Oh no! You've stumbled upon 4 seashells! What kind of data type is \"4\"? ",
+        "hint": "",
+        "option1": "Number",
+        "option2": "String",
+        "option3": "Boolean",
+        "option4": "Array",
+        "solution": 1
+    }, {
+        "question2": "Oops! You've come across 4 more seashells! What kind of data type can you make with 4 sea shells?",
+        "hint":  "",
+        "option1": "Number",
+        "option2": "String",
+        "option3": "Boolean",
+        "option4": "Array",
+        "solution": 4
+    }, {
+        "question3": "You ran into a statue of Pelé! What kind of data type is \"Pelé\"?",
+        "hint": "",
+        "option1": "Number",
+        "option2": "Boolean",
+        "option3": "String",
+        "option4": "Array",
+        "solution": 3
+    }, {
+        "question4": "Oh no you ran into a statue of __! What kind of data type would you use to say that it is true that you ran into a statue? ",
+        "hint":  "",
+        "option1": "Number",
+        "option2": "String",
+        "option3": "Boolean",
+        "option4": "Array",
+        "solution": 3
+    }, {
+        "question5": "Oops! You ran into a collection of Palm Trees! What do we call a different type of something in computer science? ",
+        "hint":  "",
+        "option1": "Data",
+        "option2": "Group",
+        "option3": "Boolean",
+        "option4": "Different things",
+        "solution": 1
+    }]
+
+
+}
