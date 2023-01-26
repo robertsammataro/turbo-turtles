@@ -1,9 +1,10 @@
 import Phaser from 'phaser'
+import level1Questions from './Quizzes/Level1QuizQuestions.json'
 
 export default class GameScene extends Phaser.Scene {
 
     //Robby's Code
-    private sampleQuiz = {
+    /*private sampleQuiz = {
 
 		title: "Sample Quiz",
 		description: "Short one-sentence description",
@@ -35,7 +36,10 @@ export default class GameScene extends Phaser.Scene {
 		}]
 
 
-	}
+	}*/
+
+    //const AI = ai.map((course: Course): Course => ({ ...course }));
+    quiz1 = level1Questions.questions.map((something: any): any => ({ ...something}));
 
     private awardedPoints = 1000
 	private totalPoints = 0
@@ -142,7 +146,7 @@ export default class GameScene extends Phaser.Scene {
         this.quizStartTime = new Date()
 
 		this.quizQuestionIndex = 0;
-		this.currentQuestion = this.sampleQuiz.questions[this.quizQuestionIndex]
+		this.currentQuestion = this.quiz1[this.quizQuestionIndex]
 
         
         //this.add.image(400, 62, 'backdrop')
@@ -153,7 +157,7 @@ export default class GameScene extends Phaser.Scene {
         /*this.add.image(125, 50, 'longBubble')
 		this.add.image(300, 50, 'longBubble')*/
 
-        this.questionNumber = this.add.text(58, 105 - this.cameras.main.worldView.x, "Question " + String(this.quizQuestionIndex + 1), {
+        this.questionNumber = this.add.text(58, 105, "Question " + String(this.quizQuestionIndex + 1), {
 			font: '28px Georgia',
 			color: '#000000'
 		}).setVisible(false).setScrollFactor(0);  
@@ -164,7 +168,7 @@ export default class GameScene extends Phaser.Scene {
 		}).setVisible(false).setScrollFactor(0);
 
 		this.quizTitle = this.add.text(50, 150, this.currentQuestion.question, {
-			font: 'bold 32px Georgia',
+			font: 'bold 25px Georgia',
 			color: '#e3d684',
 			stroke: '#000',
 			strokeThickness: 3
@@ -186,12 +190,12 @@ export default class GameScene extends Phaser.Scene {
 			color: '#000',
 		}).setOrigin(0.5).setVisible(false).setScrollFactor(0);
 
-		this.answer2 = this.add.text(605, 283, this.currentQuestion.option2, {
+		this.answer3 = this.add.text(605, 283, this.currentQuestion.option2, {
 			font: '32px Arial',
 			color: '#000'
 		}).setOrigin(0.5).setVisible(false).setScrollFactor(0);
 
-		this.answer3 = this.add.text(200, 377, this.currentQuestion.option3, {
+		this.answer2 = this.add.text(200, 377, this.currentQuestion.option3, {
 			font: '32px Arial',
 			color: '#000'
 		}).setOrigin(0.5).setVisible(false).setScrollFactor(0);
@@ -272,8 +276,8 @@ export default class GameScene extends Phaser.Scene {
 
 			this.quizQuestionIndex++;
 
-			if(this.quizQuestionIndex < this.sampleQuiz.questions.length) {
-				this.currentQuestion = this.sampleQuiz.questions[this.quizQuestionIndex]
+			if(this.quizQuestionIndex < this.quiz1.length) {
+				this.currentQuestion = this.quiz1[this.quizQuestionIndex]
 				this.quizTitle?.setText(this.currentQuestion.question)
 				this.answer1?.setText(this.currentQuestion.option1)
 				this.answer2?.setText(this.currentQuestion.option2)
@@ -360,7 +364,7 @@ export default class GameScene extends Phaser.Scene {
 
 	handleIncorrectAnswer() {
 		this.hintBubble?.setVisible(true)
-		//this.closeButton?.setVisible(true)
+		this.closeButton?.setVisible(true)
 		this.questionHint?.setVisible(true)
 		if(this.awardedPoints > 100) {
 			this.awardedPoints -= 100
