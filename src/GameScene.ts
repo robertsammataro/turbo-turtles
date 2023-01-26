@@ -80,6 +80,7 @@ export default class GameScene extends Phaser.Scene {
 
 	selectedOption: string = ""
 	currentEnemy?: Phaser.GameObjects.Image;
+	currentHidingOption: string = ""
 
     //Abbey's Code: 
     background?: Phaser.GameObjects.Image;
@@ -121,15 +122,15 @@ export default class GameScene extends Phaser.Scene {
 		this.load.image('placeholder', 'assets/quiz/placeholder.png')
 		this.load.image('backdrop', 'assets/quiz/backdrop.png')
 
-		this.load.image('bird', 'assets/enemies/bird.jpg')
-		this.load.image('crab', 'assets/enemies/crab.jpg')
-		this.load.image('mongoose', 'assets/enemies/mongoose.jpg')
-		this.load.image('slug', 'assets/enemies/slug.jpg')
+		this.load.image('bird', 'assets/enemies/bird.png')
+		this.load.image('crab', 'assets/enemies/crab.png')
+		this.load.image('mongoose', 'assets/enemies/mongoose.png')
+		this.load.image('slug', 'assets/enemies/slug.png')
 
 		this.load.image('eat', 'assets/hiding/eat.jpg')
-		this.load.image('log', 'assets/hiding/log.jpg')
-		this.load.image('sand', 'assets/hiding/sand.jpg')
-		this.load.image('shell', 'assets/hiding/shell.jpg')
+		this.load.image('log', 'assets/hiding/log.png')
+		this.load.image('sand', 'assets/hiding/sand.png')
+		this.load.image('shell', 'assets/hiding/turtle_shell.png')
 	}
 
     create()
@@ -260,7 +261,7 @@ export default class GameScene extends Phaser.Scene {
 
 		this.answerBubble2.on('pointerup', () => {
 			if (this.currentQuestion.solution === 2) {
-				this.selectedOption = this.currentQuestion.option1
+				this.selectedOption = this.currentQuestion.option2
 				this.postQuestionScene()
 			} else {
 				this.handleIncorrectAnswer()
@@ -269,7 +270,7 @@ export default class GameScene extends Phaser.Scene {
 
 		this.answerBubble3.on('pointerup', () => {
 			if (this.currentQuestion.solution === 3) {
-				this.selectedOption = this.currentQuestion.option1
+				this.selectedOption = this.currentQuestion.option3
 				this.postQuestionScene()
 			} else {
 				this.handleIncorrectAnswer()
@@ -278,7 +279,7 @@ export default class GameScene extends Phaser.Scene {
 
 		this.answerBubble4.on('pointerup', () => {
 			if (this.currentQuestion.solution === 4) {
-				this.selectedOption = this.currentQuestion.option1
+				this.selectedOption = this.currentQuestion.option4
 				this.postQuestionScene()
 			} else {
 				this.handleIncorrectAnswer()
@@ -318,34 +319,34 @@ export default class GameScene extends Phaser.Scene {
         this.answer2?.setVisible(false);
         this.answer3?.setVisible(false);
         this.answer4?.setVisible(false);
-
-		let hidingPlaceName = ""
 		
 		//Set what the turtle should turn into
 		if(this.selectedOption === "Hide in Log") {
-			hidingPlaceName = "log"
+			this.currentHidingOption = "log"
+			console.log("LOG")
 		} else if (this.selectedOption === "Hide in Sand") {
-			hidingPlaceName = "sand"
+			this.currentHidingOption = "sand"
+			console.log("SAND")
 		} else if (this.selectedOption === "Hide in Shell") {
-			hidingPlaceName = "shell"
+			this.currentHidingOption = "shell"
+			console.log("SHELL")
 		} else if (this.selectedOption === "Eat it") {
-			hidingPlaceName = "eat"
+			this.currentHidingOption = "eat"
+			console.log("EAT")
 		} else {
-
+			console.log("ERROR")
 		}
-
-		
-
-		
 
 		if(this.player) {
 
+			console.log(this.currentHidingOption)
+
 			this.player.setVisible(false)
-			this.currentHidingSpot = this.add.image(this.player.x, this.player.y, hidingPlaceName)
+			this.currentHidingSpot = this.add.image(this.player.x, this.player.y, this.currentHidingOption)
 			
 			//Set what keyframe to start at
 			if(this.currentQuestion.predator === "bird") {
-				this.currentEnemy = this.add.image(this.player.x - 450, 100, this.currentQuestion.predator)
+				this.currentEnemy = this.add.image(this.player.x - 450, 250, this.currentQuestion.predator)
 				this.currentKeyframe = "birdPassover1"
 			} else if (this.currentQuestion.predator === "mongoose") {
 				this.currentEnemy = this.add.image(this.player.x - 450, 500, this.currentQuestion.predator)
@@ -384,12 +385,6 @@ export default class GameScene extends Phaser.Scene {
 			this.quizEndTime = new Date()
 			//Print out how long the puzzle took to solve
 			console.log((this.quizEndTime!.getTime() - this.quizStartTime!.getTime()) / 1000. + " seconds")
-			
-			///////////////////////////////////////////////////////////////
-			///															///
-			///			This is where the quiz engine exits				///
-			///															///
-			///////////////////////////////////////////////////////////////
 
 		}
 
@@ -430,7 +425,6 @@ export default class GameScene extends Phaser.Scene {
 		this.quizHealth?.setText(`Health: ${this.totalPoints}`)
 
         this.quizBubble?.setVisible(false)
-        //this.closeButton?.setVisible(true)
         this.questionNumber?.setVisible(false);
         this.quizHealth?.setVisible(false);
         this.quizTitle?.setVisible(false);
@@ -443,10 +437,7 @@ export default class GameScene extends Phaser.Scene {
         this.answer1?.setVisible(false);
         this.answer2?.setVisible(false);
         this.answer3?.setVisible(false);
-        this.answer4?.setVisible(false);
-		//this.player!.x += 56;
-
-		
+        this.answer4?.setVisible(false);	
 
 	}
 
@@ -498,6 +489,7 @@ export default class GameScene extends Phaser.Scene {
 					this.currentEnemy.setX(this.currentEnemy.x += 4)
 				} else {
 					console.log("done")
+					this.currentEnemy.setFlipX(true)
 					this.currentKeyframe = "birdPassover2"
 				}
 
@@ -510,6 +502,7 @@ export default class GameScene extends Phaser.Scene {
 				} else {
 					this.beginAnimation = false
 					this.resumeGameplay()
+					this.currentEnemy.setFlipX(false)
 					console.log("done")
 				}
 			}
@@ -520,6 +513,7 @@ export default class GameScene extends Phaser.Scene {
 					this.currentEnemy.setX(this.currentEnemy.x += 4)
 				} else {
 					console.log("done")
+					this.currentEnemy.setFlipX(true)
 					this.currentKeyframe = "mongoosePassover2"
 				}
 
@@ -531,6 +525,7 @@ export default class GameScene extends Phaser.Scene {
 					this.currentEnemy.setX(this.currentEnemy.x -= 4)
 				} else {
 					this.beginAnimation = false
+					this.currentEnemy.setFlipX(false)
 					this.resumeGameplay()
 					console.log("done")
 				}
