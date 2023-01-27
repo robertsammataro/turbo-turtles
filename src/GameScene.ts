@@ -127,7 +127,7 @@ export default class GameScene extends Phaser.Scene {
 		this.load.image('mongoose', 'assets/enemies/mongoose.png')
 		this.load.image('slug', 'assets/enemies/slug.png')
 
-		this.load.image('eat', 'assets/hiding/eat.jpg')
+		this.load.image('eat', 'assets/hiding/eat.png')
 		this.load.image('log', 'assets/hiding/log.png')
 		this.load.image('sand', 'assets/hiding/sand.png')
 		this.load.image('shell', 'assets/hiding/turtle_shell.png')
