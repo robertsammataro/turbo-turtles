@@ -320,17 +320,32 @@ export default class GameScene extends Phaser.Scene {
 			
 			//Set what keyframe to start at
 			if(this.currentQuestion.predator === "bird") {
+				
 				this.currentEnemy = this.add.image(this.player.x - 450, 250, this.currentQuestion.predator)
 				this.currentKeyframe = "birdPassover1"
+			
 			} else if (this.currentQuestion.predator === "mongoose") {
+				
 				this.currentEnemy = this.add.image(this.player.x - 450, 500, this.currentQuestion.predator)
 				this.currentKeyframe = "mongoosePassover1"
+			
 			} else if (this.currentQuestion.predator === "crab") {
+				
 				this.currentEnemy = this.add.image(this.player.x - 450, 500, this.currentQuestion.predator)
 				this.currentKeyframe = "crabPassover1"
+			
 			} else if (this.currentQuestion.predator === "slug") {
-				this.currentEnemy = this.add.image(this.player.x + 450, this.player.y, this.currentQuestion.predator)
-				this.currentKeyframe = "slugPassover1"
+				
+				if(this.selectedOption === "Eat it") {
+					this.currentEnemy = this.add.image(this.player.x + 450, this.player.y, this.currentQuestion.predator)
+					this.currentKeyframe = "slugPassover1"
+				}
+
+				else {
+					this.currentEnemy = this.add.image(this.player.x + 450, this.player.y, this.currentQuestion.predator)
+					this.currentKeyframe = "slugPassover2"
+				}
+				
 			}
 			
 			
@@ -550,6 +565,24 @@ export default class GameScene extends Phaser.Scene {
 			if(this.currentKeyframe === "slugPassover1") {
 
 				if(this.currentEnemy.x > (this.player.x)) {
+					this.currentEnemy.setX(this.currentEnemy.x -= 1)
+				} else {
+					console.log("done")
+					this.beginAnimation = false
+					this.resumeGameplay()
+					if(this.selectedOption === "Eat it") {
+						this.showDialogBox("Mmmm, Yummy!")
+					} else {
+						this.showDialogBox("Ooooh I should've eaten that!")
+						this.setHealth(this.health - 10);
+					}
+				}
+
+			}
+
+			if(this.currentKeyframe === "slugPassover2") {
+
+				if(this.currentEnemy.x > this.player.x - 450) {
 					this.currentEnemy.setX(this.currentEnemy.x -= 1)
 				} else {
 					console.log("done")
