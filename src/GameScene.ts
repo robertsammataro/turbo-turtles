@@ -309,7 +309,7 @@ export default class GameScene extends Phaser.Scene {
 		//Set what the turtle should turn into
 		if(this.selectedOption === "Hide in Log") {
 			this.currentHidingOption = "log"
-		} else if (this.selectedOption === "Hide in Sand") {
+		} else if (this.selectedOption === "Burrow") {
 			this.currentHidingOption = "sand"
 		} else if (this.selectedOption === "Hide in Shell") {
 			this.currentHidingOption = "shell"
@@ -550,7 +550,7 @@ export default class GameScene extends Phaser.Scene {
 					this.beginAnimation = false
 					this.currentEnemy.setFlipX(false)
 					this.resumeGameplay()
-					if(this.selectedOption === "Hide in Sand") {
+					if(this.selectedOption === "Hide in Shell") {
 						this.showDialogBox("Phew, that was close!")
 					} else {
 						this.showDialogBox("Ouch, that hurt!")
@@ -567,7 +567,7 @@ export default class GameScene extends Phaser.Scene {
 					console.log("done")
 					this.beginAnimation = false
 					this.resumeGameplay()
-					if(this.selectedOption === "Hide in Shell") {
+					if(this.selectedOption === "Burrow") {
 						this.showDialogBox("Phew, that was close!")
 					} else {
 						this.showDialogBox("Ouch, that hurt!")
