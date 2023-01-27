@@ -41,8 +41,6 @@ export default class GameScene extends Phaser.Scene {
     //const AI = ai.map((course: Course): Course => ({ ...course }));
     quiz1 = level1Questions.questions.map((something: any): any => ({ ...something}));
 
-    private awardedPoints = 1000
-	private totalPoints = 0
 	private quizQuestionIndex = -1		//Defaults to -1, will be set to 0 once the quiz starts
 	private currentQuestion = {			//Will be used to contain the current question
 		question: '',
@@ -86,7 +84,10 @@ export default class GameScene extends Phaser.Scene {
 	dialogBoxText?: Phaser.GameObjects.Text;
 	dialogBoxClose?: Phaser.GameObjects.Image;
 
-	pauseKeyboardControl?: boolean = false
+	pauseKeyboardControl?: boolean = false;
+	healthBar?: Phaser.GameObjects.Image;
+	healthBarText?: Phaser.GameObjects.Text;
+	health: number = 100;
 
     //Abbey's Code: 
     background?: Phaser.GameObjects.Image;
@@ -97,6 +98,8 @@ export default class GameScene extends Phaser.Scene {
 	currentHidingSpot?: Phaser.GameObjects.Image;
 	beginAnimation?: boolean;
 	currentKeyframe?: string;
+	
+	
 	
 	
 	
@@ -174,10 +177,21 @@ export default class GameScene extends Phaser.Scene {
 		this.quizQuestionIndex = 0;
 		this.currentQuestion = this.quiz1[this.quizQuestionIndex]
 
+		this.healthBar = this.add.image(90, 30, 'longBubble')
+			.setScrollFactor(0)
+
+		this.healthBarText = this.add.text(90, 25, `Health: ${this.health}`, {
+			font: 'bold 20px Georgia',
+			color: '#000',
+		})
+			.setScrollFactor(0)
+			.setOrigin(0.5)
+
 		this.dialogBox = this.add.image(400, 90, 'backdrop')
 			.setVisible(false)
 			.setOrigin(0.5)
 			.setScrollFactor(0)
+			
 		this.dialogBoxText = this.add.text(40, 40, "text not instantiated", {
 			font: 'bold 25px Georgia',
 			color: '#e3d684',
@@ -186,22 +200,11 @@ export default class GameScene extends Phaser.Scene {
 		})
 			.setScrollFactor(0)
 			.setVisible(false)
+
 		this.dialogBoxClose = this.add.image(700, 100, 'next')
 			.setVisible(false)
 			.setScrollFactor(0)
 			.setInteractive()
-
-        this.questionNumber = this.add.text(58, 105, "Question " + String(this.quizQuestionIndex + 1), {
-			font: '28px Georgia',
-			color: '#000000'
-		})
-			.setVisible(false)
-			.setScrollFactor(0);  
-
-		this.quizHealth = this.add.text(240, 108, `Health: ${this.totalPoints}`, {
-			font: '24px Georgia',
-			color: '#000000'
-		}).setVisible(false).setScrollFactor(0);
 
 		this.quizTitle = this.add.text(50, 150, this.currentQuestion.question, {
 			font: 'bold 25px Georgia',
@@ -273,39 +276,23 @@ export default class GameScene extends Phaser.Scene {
 
 		//Controls what happens when an answer bubble is selected:
 		this.answerBubble1.on('pointerup', () => {
-			if (this.currentQuestion.solution === 1) {
-				this.selectedOption = this.currentQuestion.option1
-				this.postQuestionScene()
-			} else {
-				this.handleIncorrectAnswer()
-			}
+			this.selectedOption = this.currentQuestion.option1
+			this.postQuestionScene()
 		})
 
 		this.answerBubble2.on('pointerup', () => {
-			if (this.currentQuestion.solution === 2) {
-				this.selectedOption = this.currentQuestion.option2
-				this.postQuestionScene()
-			} else {
-				this.handleIncorrectAnswer()
-			}
+			this.selectedOption = this.currentQuestion.option3
+			this.postQuestionScene()
 		})
 
 		this.answerBubble3.on('pointerup', () => {
-			if (this.currentQuestion.solution === 3) {
-				this.selectedOption = this.currentQuestion.option3
-				this.postQuestionScene()
-			} else {
-				this.handleIncorrectAnswer()
-			}
+			this.selectedOption = this.currentQuestion.option2
+			this.postQuestionScene()
 		})
 
 		this.answerBubble4.on('pointerup', () => {
-			if (this.currentQuestion.solution === 4) {
-				this.selectedOption = this.currentQuestion.option4
-				this.postQuestionScene()
-			} else {
-				this.handleIncorrectAnswer()
-			}
+			this.selectedOption = this.currentQuestion.option4
+			this.postQuestionScene()
 		})
 		
 		this.nextButton.on('pointerup', () => {
@@ -328,8 +315,6 @@ export default class GameScene extends Phaser.Scene {
 
 		//Hide the question dialogs!
 		this.quizBubble?.setVisible(false)
-        this.questionNumber?.setVisible(false);
-        this.quizHealth?.setVisible(false);
         this.quizTitle?.setVisible(false);
         this.answerBubble1?.setVisible(false);
         this.answerBubble2?.setVisible(false);
@@ -398,7 +383,6 @@ export default class GameScene extends Phaser.Scene {
 			this.answer2?.setText(this.currentQuestion.option2)
 			this.answer3?.setText(this.currentQuestion.option3)
 			this.answer4?.setText(this.currentQuestion.option4)
-			this.questionNumber?.setText("Question " + String(this.quizQuestionIndex + 1))
 		} else {
 
 			this.quizEndTime = new Date()
@@ -419,8 +403,6 @@ export default class GameScene extends Phaser.Scene {
 			this.pauseKeyboardControl = true
 
             this.quizBubble?.setVisible(true)
-            this.questionNumber?.setVisible(true);
-            this.quizHealth?.setVisible(true);
             this.quizTitle?.setVisible(true);
             this.answerBubble1?.setVisible(true);
             this.answerBubble2?.setVisible(true);
@@ -438,13 +420,8 @@ export default class GameScene extends Phaser.Scene {
     handleCorrectAnswer() {
 		this.correctBubble?.setVisible(true)
 		this.nextButton?.setVisible(true)
-		this.totalPoints += this.awardedPoints
-		this.awardedPoints = 1000
-		this.quizHealth?.setText(`Health: ${this.totalPoints}`)
 
         this.quizBubble?.setVisible(false)
-        this.questionNumber?.setVisible(false);
-        this.quizHealth?.setVisible(false);
         this.quizTitle?.setVisible(false);
         this.answerBubble1?.setVisible(false);
         this.answerBubble2?.setVisible(false);
@@ -463,9 +440,6 @@ export default class GameScene extends Phaser.Scene {
 		this.hintBubble?.setVisible(true)
 		this.closeButton?.setVisible(true)
 		this.questionHint?.setVisible(true)
-		if(this.awardedPoints > 100) {
-			this.awardedPoints -= 100
-		}
 	}
 
 	showDialogBox(text: string) {
@@ -493,6 +467,11 @@ export default class GameScene extends Phaser.Scene {
 		this.player?.setVisible(true)
 		this.advanceQuestions()
 
+	}
+
+	setHealth(newHealth: number) {
+		this.health = newHealth
+		this.healthBarText?.setText(`Health: ${this.health}`)
 	}
 
     update()
@@ -539,7 +518,19 @@ export default class GameScene extends Phaser.Scene {
 					this.beginAnimation = false
 					this.resumeGameplay()
 					this.currentEnemy.setFlipX(false)
-					this.showDialogBox("Phew, that was close!")
+
+					if(this.selectedOption === "Hide in Log") {
+
+						this.showDialogBox("Phew, that was close!")
+
+					} else {
+
+						this.showDialogBox("Ouch, that hurt!")
+						this.setHealth(this.health - 10);
+
+					}
+
+					
 				}
 			}
 
