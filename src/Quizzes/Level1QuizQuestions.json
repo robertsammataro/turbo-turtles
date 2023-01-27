@@ -3,45 +3,37 @@
     "description": "This is the quiz that focuses on data types",
     "lesson_slides": ["sample_file_path_1", "sample_file_path_2"],
     "questions": [{
-        "question": "Oh no! You've stumbled upon 4 seashells!\nWhat kind of data type is \"4\"? ",
-        "hint": "",
-        "option1": "Number",
-        "option2": "String",
-        "option3": "Boolean",
-        "option4": "Array",
+        "question": "Oh no! There's a bird flying above!\nWhat should you do? ",
+        "predator": "bird",
+        "option1": "Hide in Log",
+        "option2": "Hide in Shell",
+        "option3": "Eat it",
+        "option4": "Hide in Sand",
         "solution": 1
     }, {
-        "question": "Oops! You've come across 4 more seashells!\nWhat kind of data type can you make with 4 sea shells?",
-        "hint":  "",
-        "option1": "Number",
-        "option2": "String",
-        "option3": "Boolean",
-        "option4": "Array",
+        "question": "Watch out, there's a mongoose coming!\nWhere should we hide?",
+        "predator":  "mongoose",
+        "option1": "Hide in Log",
+        "option2": "Hide in Shell",
+        "option3": "Eat it",
+        "option4": "Hide in Sand",
         "solution": 4
     }, {
-        "question": "You ran into a statue of Pelé!\nWhat kind of data type is \"Pelé\"?",
-        "hint": "",
-        "option1": "Number",
-        "option2": "String",
-        "option3": "Boolean",
-        "option4": "Array",
+        "question": "Here comes a crab!\nWhat do we need to do?",
+        "predator": "crab",
+        "option1": "Hide in Log",
+        "option2": "Hide in Shell",
+        "option3": "Eat it",
+        "option4": "Hide in Sand",
         "solution": 2
     }, {
-        "question": "Oh no you ran into a statue of __!\nWhat kind of data type would you use to say that it is\ntrue that you ran into a statue? ",
-        "hint":  "",
-        "option1": "Number",
-        "option2": "String",
-        "option3": "Boolean",
-        "option4": "Array",
+        "question": "Hey, here's a slug!\nWhat should we do?",
+        "predator":  "slug",
+        "option1": "Hide in Log",
+        "option2": "Hide in Shell",
+        "option3": "Eat it",
+        "option4": "Hide in Sand",
         "solution": 3
-    }, {
-        "question": "Oops! You ran into a collection of Palm Trees!\nWhat do we call a different type of something in\ncomputer science? ",
-        "hint":  "",
-        "option1": "Data",
-        "option2": "Group",
-        "option3": "Boolean",
-        "option4": "Different things",
-        "solution": 1
     }]
 
 

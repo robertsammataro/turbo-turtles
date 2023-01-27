@@ -3,50 +3,12 @@ import level1Questions from './Quizzes/Level1QuizQuestions.json'
 
 export default class GameScene extends Phaser.Scene {
 
-    //Robby's Code
-    /*private sampleQuiz = {
-
-		title: "Sample Quiz",
-		description: "Short one-sentence description",
-		lesson_slides: ["sample_file_path_1", "sample_file_path_2"],
-		questions:[{
-			question: "This is the first question",
-			hint: "This is the provided hint",
-			option1: "Answer",
-			option2: "Not the answer",
-			option3: "Not the answer",
-			option4: "Not the answer",
-			solution: 1
-		}, {
-			question: "This is the second question",
-			hint: "This is the provided hint",
-			option1: "Answer",
-			option2: "Not the answer",
-			option3: "Not the answer",
-			option4: "Not the answer",
-			solution: 1
-		}, {
-			question: "This is the third question",
-			hint: "This is the provided hint",
-			option1: "Answer",
-			option2: "Not the answer",
-			option3: "Not the answer",
-			option4: "Not the answer",
-			solution: 1
-		}]
-
-
-	}*/
-
-    //const AI = ai.map((course: Course): Course => ({ ...course }));
     quiz1 = level1Questions.questions.map((something: any): any => ({ ...something}));
 
-    private awardedPoints = 1000
-	private totalPoints = 0
 	private quizQuestionIndex = -1		//Defaults to -1, will be set to 0 once the quiz starts
 	private currentQuestion = {			//Will be used to contain the current question
 		question: '',
-		hint: '',
+		predator: '',
 		option1: '',
 		option2: '',
 		option3: '',
@@ -73,10 +35,23 @@ export default class GameScene extends Phaser.Scene {
 	answer3?: Phaser.GameObjects.Text
 	answer4?: Phaser.GameObjects.Text
 	questionNumber?: Phaser.GameObjects.Text
-	quizScore?: Phaser.GameObjects.Text
+	quizHealth?: Phaser.GameObjects.Text
 	quizStartTime?: Date
 	quizEndTime?: Date
     questionHint?: Phaser.GameObjects.Text
+
+	selectedOption: string = ""
+	currentEnemy?: Phaser.GameObjects.Image;
+	currentHidingOption: string = ""
+
+	dialogBox?: Phaser.GameObjects.Image;
+	dialogBoxText?: Phaser.GameObjects.Text;
+	dialogBoxClose?: Phaser.GameObjects.Image;
+
+	pauseKeyboardControl?: boolean = false;
+	healthBar?: Phaser.GameObjects.Image;
+	healthBarText?: Phaser.GameObjects.Text;
+	health: number = 100;
 
     //Abbey's Code: 
     background?: Phaser.GameObjects.Image;
@@ -84,6 +59,9 @@ export default class GameScene extends Phaser.Scene {
     private platform?: Phaser.Physics.Arcade.StaticGroup;
     private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
     private obstacles?: Phaser.Physics.Arcade.Group;
+	currentHidingSpot?: Phaser.GameObjects.Image;
+	beginAnimation?: boolean;
+	currentKeyframe?: string;
 
     constructor() 
     {
@@ -100,7 +78,6 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('platform', 'assets/platform.png');
         this.load.image('obstacleForNow', 'assets/beach/obstacleForNow.png')
 
-        //Robby's code 
         this.load.image('answerBubble', 'assets/quiz/answer_bubble.png')
 		this.load.image('exitArrow', 'assets/quiz/exit_arrow')
 		this.load.image('hintButton', 'assets/quiz/hint.png')
@@ -113,6 +90,16 @@ export default class GameScene extends Phaser.Scene {
 
 		this.load.image('placeholder', 'assets/quiz/placeholder.png')
 		this.load.image('backdrop', 'assets/quiz/backdrop.png')
+
+		this.load.image('bird', 'assets/enemies/bird.png')
+		this.load.image('crab', 'assets/enemies/crab.png')
+		this.load.image('mongoose', 'assets/enemies/mongoose.png')
+		this.load.image('slug', 'assets/enemies/slug.png')
+
+		this.load.image('eat', 'assets/hiding/eat.png')
+		this.load.image('log', 'assets/hiding/log.png')
+		this.load.image('sand', 'assets/hiding/sand.png')
+		this.load.image('shell', 'assets/hiding/turtle_shell.png')
 	}
 
     create()
@@ -148,24 +135,34 @@ export default class GameScene extends Phaser.Scene {
 		this.quizQuestionIndex = 0;
 		this.currentQuestion = this.quiz1[this.quizQuestionIndex]
 
-        
-        //this.add.image(400, 62, 'backdrop')
+		this.healthBar = this.add.image(90, 30, 'longBubble')
+			.setScrollFactor(0)
 
-        //Indicate what question the user is currently on
+		this.healthBarText = this.add.text(90, 25, `Health: ${this.health}`, {
+			font: 'bold 20px Georgia',
+			color: '#000',
+		})
+			.setScrollFactor(0)
+			.setOrigin(0.5)
 
-		
-        /*this.add.image(125, 50, 'longBubble')
-		this.add.image(300, 50, 'longBubble')*/
+		this.dialogBox = this.add.image(400, 90, 'backdrop')
+			.setVisible(false)
+			.setOrigin(0.5)
+			.setScrollFactor(0)
+			
+		this.dialogBoxText = this.add.text(40, 40, "text not instantiated", {
+			font: 'bold 25px Georgia',
+			color: '#e3d684',
+			stroke: '#000',
+			strokeThickness: 3
+		})
+			.setScrollFactor(0)
+			.setVisible(false)
 
-        this.questionNumber = this.add.text(58, 105, "Question " + String(this.quizQuestionIndex + 1), {
-			font: '28px Georgia',
-			color: '#000000'
-		}).setVisible(false).setScrollFactor(0);  
-
-		this.quizScore = this.add.text(240, 108, `Score: ${this.totalPoints}`, {
-			font: '24px Georgia',
-			color: '#000000'
-		}).setVisible(false).setScrollFactor(0);
+		this.dialogBoxClose = this.add.image(700, 100, 'next')
+			.setVisible(false)
+			.setScrollFactor(0)
+			.setInteractive()
 
 		this.quizTitle = this.add.text(50, 150, this.currentQuestion.question, {
 			font: 'bold 25px Georgia',
@@ -188,22 +185,34 @@ export default class GameScene extends Phaser.Scene {
 		this.answer1 = this.add.text(200, 283, this.currentQuestion.option1, {
 			font: '32px Arial',
 			color: '#000',
-		}).setOrigin(0.5).setVisible(false).setScrollFactor(0);
+		})
+			.setOrigin(0.5)
+			.setVisible(false)
+			.setScrollFactor(0);
 
 		this.answer3 = this.add.text(605, 283, this.currentQuestion.option2, {
 			font: '32px Arial',
 			color: '#000'
-		}).setOrigin(0.5).setVisible(false).setScrollFactor(0);
+		})
+			.setOrigin(0.5)
+			.setVisible(false)
+			.setScrollFactor(0);
 
 		this.answer2 = this.add.text(200, 377, this.currentQuestion.option3, {
 			font: '32px Arial',
 			color: '#000'
-		}).setOrigin(0.5).setVisible(false).setScrollFactor(0);
+		})
+			.setOrigin(0.5)
+			.setVisible(false)
+			.setScrollFactor(0);
 
 		this.answer4 = this.add.text(605, 377, this.currentQuestion.option4, {
 			font: '32px Arial',
 			color: '#000'
-		}).setOrigin(0.5).setVisible(false).setScrollFactor(0);
+		})
+			.setOrigin(0.5)
+			.setVisible(false)
+			.setScrollFactor(0);
 
 		this.hintButton = this.add.image(710, 135, 'hintButton').setVisible(false).setScrollFactor(0);
 		this.hintButton.setInteractive()
@@ -211,12 +220,6 @@ export default class GameScene extends Phaser.Scene {
         //Initialize hintBubble and hide it
 		this.hintBubble = this.add.image(400, 350, 'hintBubble').setVisible(false).setScrollFactor(0)
 		this.hintBubble.setInteractive()
-
-		this.questionHint = this.add.text(400, 300, this.currentQuestion.hint, {
-			font: '32px Arial',
-			color: '#000'
-		}).setOrigin(0.5).setVisible(false).setScrollFactor(0)
-		this.questionHint.setVisible(false)
 
 		this.closeButton = this.add.image(550, 440, 'close').setVisible(false).setScrollFactor(0)
 		this.closeButton.setInteractive()
@@ -226,6 +229,10 @@ export default class GameScene extends Phaser.Scene {
 
 		this.nextButton = this.add.image(550, 440, 'next').setVisible(false).setScrollFactor(0)
 		this.nextButton.setInteractive()
+
+		this.dialogBoxClose.on('pointerup', () => {
+			this.closeDialogBox()
+		})
 
         //Controls what happens when the hint button is clicked 
 		this.hintButton.on('pointerup', () => {
@@ -239,64 +246,28 @@ export default class GameScene extends Phaser.Scene {
 
 		//Controls what happens when an answer bubble is selected:
 		this.answerBubble1.on('pointerup', () => {
-			if (this.currentQuestion.solution === 1) {
-				this.handleCorrectAnswer()
-			} else {
-				this.handleIncorrectAnswer()
-			}
+			this.selectedOption = this.currentQuestion.option1
+			this.postQuestionScene()
 		})
 
 		this.answerBubble2.on('pointerup', () => {
-			if (this.currentQuestion.solution === 2) {
-				this.handleCorrectAnswer()
-			} else {
-				this.handleIncorrectAnswer()
-			}
+			this.selectedOption = this.currentQuestion.option2
+			this.postQuestionScene()
 		})
 
 		this.answerBubble3.on('pointerup', () => {
-			if (this.currentQuestion.solution === 3) {
-				this.handleCorrectAnswer()
-			} else {
-				this.handleIncorrectAnswer()
-			}
+			this.selectedOption = this.currentQuestion.option3
+			this.postQuestionScene()
 		})
 
 		this.answerBubble4.on('pointerup', () => {
-			if (this.currentQuestion.solution === 4) {
-				this.handleCorrectAnswer()
-			} else {
-				this.handleIncorrectAnswer()
-			}
+			this.selectedOption = this.currentQuestion.option4
+			this.postQuestionScene()
 		})
 		
 		this.nextButton.on('pointerup', () => {
 			this.correctBubble?.setVisible(false)
 			this.nextButton?.setVisible(false)
-
-			this.quizQuestionIndex++;
-
-			if(this.quizQuestionIndex < this.quiz1.length) {
-				this.currentQuestion = this.quiz1[this.quizQuestionIndex]
-				this.quizTitle?.setText(this.currentQuestion.question)
-				this.answer1?.setText(this.currentQuestion.option1)
-				this.answer2?.setText(this.currentQuestion.option2)
-				this.answer3?.setText(this.currentQuestion.option3)
-				this.answer4?.setText(this.currentQuestion.option4)
-				this.questionNumber?.setText("Question " + String(this.quizQuestionIndex + 1))
-			} else {
-
-				this.quizEndTime = new Date()
-				//Print out how long the puzzle took to solve
-				console.log((this.quizEndTime!.getTime() - this.quizStartTime!.getTime()) / 1000. + " seconds")
-				
-				///////////////////////////////////////////////////////////////
-				///															///
-				///			This is where the quiz engine exits				///
-				///															///
-				///////////////////////////////////////////////////////////////
-
-			}
 
 		})
 
@@ -310,43 +281,10 @@ export default class GameScene extends Phaser.Scene {
         
     }
 
-    private handleCollideObstacles(player: Phaser.GameObjects.GameObject, obstacle: Phaser.GameObjects.GameObject){
-        //console.log(this.cameras.main.worldView.x);
-        const obstacle2 = obstacle as Phaser.Physics.Arcade.Image;
-        obstacle2.disableBody(true, true);
-        //this.physics.pause();
-        //this.scene.start('QuizScene');
-        if(!this.quizBubble?.visible){
-            this.quizBubble?.setVisible(true)
-            //this.closeButton?.setVisible(true)
-            this.questionNumber?.setVisible(true);
-            this.quizScore?.setVisible(true);
-            this.quizTitle?.setVisible(true);
-            this.answerBubble1?.setVisible(true);
-            this.answerBubble2?.setVisible(true);
-            this.answerBubble3?.setVisible(true);
-            this.answerBubble4?.setVisible(true);
-            this.hintButton?.setVisible(true);
-            //this.questionHint?.setVisible(true);
-            this.answer1?.setVisible(true);
-            this.answer2?.setVisible(true);
-            this.answer3?.setVisible(true);
-            this.answer4?.setVisible(true);
+	private postQuestionScene() {
 
-        }
-    }
-
-    handleCorrectAnswer() {
-		this.correctBubble?.setVisible(true)
-		this.nextButton?.setVisible(true)
-		this.totalPoints += this.awardedPoints
-		this.awardedPoints = 1000
-		this.quizScore?.setText(`Score: ${this.totalPoints}`)
-
-        this.quizBubble?.setVisible(false)
-        //this.closeButton?.setVisible(true)
-        this.questionNumber?.setVisible(false);
-        this.quizScore?.setVisible(false);
+		//Hide the question dialogs!
+		this.quizBubble?.setVisible(false)
         this.quizTitle?.setVisible(false);
         this.answerBubble1?.setVisible(false);
         this.answerBubble2?.setVisible(false);
@@ -358,7 +296,128 @@ export default class GameScene extends Phaser.Scene {
         this.answer2?.setVisible(false);
         this.answer3?.setVisible(false);
         this.answer4?.setVisible(false);
-		//this.player!.x += 56;
+		
+		//Set what the turtle should turn into
+		if(this.selectedOption === "Hide in Log") {
+			this.currentHidingOption = "log"
+		} else if (this.selectedOption === "Hide in Sand") {
+			this.currentHidingOption = "sand"
+		} else if (this.selectedOption === "Hide in Shell") {
+			this.currentHidingOption = "shell"
+		} else if (this.selectedOption === "Eat it") {
+			this.currentHidingOption = "eat"
+		} else {
+			console.log("ERROR")
+		}
+
+		if(this.player) {
+
+			console.log(this.currentHidingOption)
+
+			this.player.setVisible(false)
+			this.pauseKeyboardControl = true
+			this.currentHidingSpot = this.add.image(this.player.x, this.player.y, this.currentHidingOption)
+			
+			//Set what keyframe to start at
+			if(this.currentQuestion.predator === "bird") {
+				
+				this.currentEnemy = this.add.image(this.player.x - 450, 250, this.currentQuestion.predator)
+				this.currentKeyframe = "birdPassover1"
+			
+			} else if (this.currentQuestion.predator === "mongoose") {
+				
+				this.currentEnemy = this.add.image(this.player.x - 450, 500, this.currentQuestion.predator)
+				this.currentKeyframe = "mongoosePassover1"
+			
+			} else if (this.currentQuestion.predator === "crab") {
+				
+				this.currentEnemy = this.add.image(this.player.x - 450, 500, this.currentQuestion.predator)
+				this.currentKeyframe = "crabPassover1"
+			
+			} else if (this.currentQuestion.predator === "slug") {
+				
+				if(this.selectedOption === "Eat it") {
+					this.currentEnemy = this.add.image(this.player.x + 450, this.player.y, this.currentQuestion.predator)
+					this.currentKeyframe = "slugPassover1"
+				}
+
+				else {
+					this.currentEnemy = this.add.image(this.player.x + 450, this.player.y, this.currentQuestion.predator)
+					this.currentKeyframe = "slugPassover2"
+				}
+				
+			}
+			
+			
+			this.beginAnimation = true
+
+		}
+		
+		
+
+	}
+
+	private advanceQuestions() {
+
+		this.quizQuestionIndex++;
+
+		if(this.quizQuestionIndex < this.quiz1.length) {
+			this.currentQuestion = this.quiz1[this.quizQuestionIndex]
+			this.quizTitle?.setText(this.currentQuestion.question)
+			this.answer1?.setText(this.currentQuestion.option1)
+			this.answer2?.setText(this.currentQuestion.option2)
+			this.answer3?.setText(this.currentQuestion.option3)
+			this.answer4?.setText(this.currentQuestion.option4)
+		} else {
+
+			this.quizEndTime = new Date()
+			//Print out how long the puzzle took to solve
+			console.log((this.quizEndTime!.getTime() - this.quizStartTime!.getTime()) / 1000. + " seconds")
+
+		}
+
+
+	}
+
+    private handleCollideObstacles(player: Phaser.GameObjects.GameObject, obstacle: Phaser.GameObjects.GameObject){
+
+        const obstacle2 = obstacle as Phaser.Physics.Arcade.Image;
+        obstacle2.disableBody(true, true);
+        if(!this.quizBubble?.visible){
+
+			this.pauseKeyboardControl = true
+
+            this.quizBubble?.setVisible(true)
+            this.quizTitle?.setVisible(true);
+            this.answerBubble1?.setVisible(true);
+            this.answerBubble2?.setVisible(true);
+            this.answerBubble3?.setVisible(true);
+            this.answerBubble4?.setVisible(true);
+            this.hintButton?.setVisible(true);
+            this.answer1?.setVisible(true);
+            this.answer2?.setVisible(true);
+            this.answer3?.setVisible(true);
+            this.answer4?.setVisible(true);
+
+        }
+    }
+
+    handleCorrectAnswer() {
+		this.correctBubble?.setVisible(true)
+		this.nextButton?.setVisible(true)
+
+        this.quizBubble?.setVisible(false)
+        this.quizTitle?.setVisible(false);
+        this.answerBubble1?.setVisible(false);
+        this.answerBubble2?.setVisible(false);
+        this.answerBubble3?.setVisible(false);
+        this.answerBubble4?.setVisible(false);
+        this.hintButton?.setVisible(false);
+        this.questionHint?.setVisible(false);
+        this.answer1?.setVisible(false);
+        this.answer2?.setVisible(false);
+        this.answer3?.setVisible(false);
+        this.answer4?.setVisible(false);	
 
 	}
 
@@ -366,9 +425,38 @@ export default class GameScene extends Phaser.Scene {
 		this.hintBubble?.setVisible(true)
 		this.closeButton?.setVisible(true)
 		this.questionHint?.setVisible(true)
-		if(this.awardedPoints > 100) {
-			this.awardedPoints -= 100
-		}
+	}
+
+	showDialogBox(text: string) {
+
+		this.dialogBox?.setVisible(true)
+		this.dialogBoxText?.setText(text).setVisible(true)
+		this.dialogBoxClose?.setVisible(true)
+		this.pauseKeyboardControl = true
+
+	}
+
+	closeDialogBox() {
+
+		this.dialogBox?.setVisible(false)
+		this.dialogBoxText?.setVisible(false)
+		this.dialogBoxClose?.setVisible(false)
+		this.pauseKeyboardControl = false
+
+	}
+
+	private resumeGameplay() {
+
+		this.currentEnemy?.setVisible(false)
+		this.currentHidingSpot?.setVisible(false)
+		this.player?.setVisible(true)
+		this.advanceQuestions()
+
+	}
+
+	setHealth(newHealth: number) {
+		this.health = newHealth
+		this.healthBarText?.setText(`Health: ${this.health}`)
 	}
 
     update()
@@ -376,22 +464,141 @@ export default class GameScene extends Phaser.Scene {
         if(!this.cursors){
 			return;
 		}
-
-		if(this.cursors?.left?.isDown){
+		
+		if(this.cursors?.left?.isDown && !this.pauseKeyboardControl){
 			this.player?.setVelocityX(-160);
-			this.player?.anims.play('left', true)
-		}else if(this.cursors.right?.isDown){
+			//this.player?.anims.play('left', true)
+		}else if(this.cursors.right?.isDown && !this.pauseKeyboardControl){
 			this.player?.setVelocityX(160);
-			this.player?.anims.play('right', true)
+			//this.player?.anims.play('right', true)
 		}else{
 			this.player?.setVelocityX(0);
-			this.player?.anims.play('turn');
+			//this.player?.anims.play('turn');
 		}
 
 		if(this.cursors.up?.isDown && this.player?.body.touching.down){
 			this.player.setVelocityY(-330);
 		}
+		
         
+		//Handle the animations for the enemies
+		if(this.currentEnemy && this.beginAnimation && this.player) {
+
+			if(this.currentKeyframe === "birdPassover1") {
+
+				if(this.currentEnemy.x < (this.player.x + 450)) {
+					this.currentEnemy.setX(this.currentEnemy.x += 4)
+				} else {
+					this.currentEnemy.setFlipX(true)
+					this.currentKeyframe = "birdPassover2"
+				}
+
+			}
+
+			if(this.currentKeyframe === "birdPassover2") {
+
+				if(this.currentEnemy.x > this.player.x - 450) {
+					this.currentEnemy.setX(this.currentEnemy.x -= 4)
+				} else {
+					this.beginAnimation = false
+					this.resumeGameplay()
+					this.currentEnemy.setFlipX(false)
+
+					if(this.selectedOption === "Hide in Log") {
+						this.showDialogBox("Phew, that was close!")
+					} else {
+						this.showDialogBox("Ouch, that hurt!")
+						this.setHealth(this.health - 10);
+					}
+
+					
+				}
+			}
+
+			if(this.currentKeyframe === "mongoosePassover1") {
+
+				if(this.currentEnemy.x < (this.player.x + 450)) {
+					this.currentEnemy.setX(this.currentEnemy.x += 4)
+				} else {
+					console.log("done")
+					this.currentEnemy.setFlipX(true)
+					this.currentKeyframe = "mongoosePassover2"
+				}
+
+			}
+
+			if(this.currentKeyframe === "mongoosePassover2") {
+
+				if(this.currentEnemy.x > this.player.x - 450) {
+					this.currentEnemy.setX(this.currentEnemy.x -= 4)
+				} else {
+					this.beginAnimation = false
+					this.currentEnemy.setFlipX(false)
+					this.resumeGameplay()
+					if(this.selectedOption === "Hide in Sand") {
+						this.showDialogBox("Phew, that was close!")
+					} else {
+						this.showDialogBox("Ouch, that hurt!")
+						this.setHealth(this.health - 10);
+					}
+				}
+			}
+
+			if(this.currentKeyframe === "crabPassover1") {
+
+				if(this.currentEnemy.x < (this.player.x + 450)) {
+					this.currentEnemy.setX(this.currentEnemy.x += 2)
+				} else {
+					console.log("done")
+					this.beginAnimation = false
+					this.resumeGameplay()
+					if(this.selectedOption === "Hide in Shell") {
+						this.showDialogBox("Phew, that was close!")
+					} else {
+						this.showDialogBox("Ouch, that hurt!")
+						this.setHealth(this.health - 10);
+					}
+				}
+
+			}
+
+			if(this.currentKeyframe === "slugPassover1") {
+
+				if(this.currentEnemy.x > (this.player.x)) {
+					this.currentEnemy.setX(this.currentEnemy.x -= 1)
+				} else {
+					console.log("done")
+					this.beginAnimation = false
+					this.resumeGameplay()
+					if(this.selectedOption === "Eat it") {
+						this.showDialogBox("Mmmm, Yummy!")
+					} else {
+						this.showDialogBox("Ooooh I should've eaten that!")
+						this.setHealth(this.health - 10);
+					}
+				}
+
+			}
+
+			if(this.currentKeyframe === "slugPassover2") {
+
+				if(this.currentEnemy.x > this.player.x - 450) {
+					this.currentEnemy.setX(this.currentEnemy.x -= 1)
+				} else {
+					console.log("done")
+					this.beginAnimation = false
+					this.resumeGameplay()
+					if(this.selectedOption === "Eat it") {
+						this.showDialogBox("Mmmm, Yummy!")
+					} else {
+						this.showDialogBox("Ooooh I should've eaten that!")
+						this.setHealth(this.health - 10);
+					}
+				}
+
+			}
+
+		}
 
     }
 
