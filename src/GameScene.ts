@@ -3,42 +3,6 @@ import level1Questions from './Quizzes/Level1QuizQuestions.json'
 
 export default class GameScene extends Phaser.Scene {
 
-    //Robby's Code
-    /*private sampleQuiz = {
-
-		title: "Sample Quiz",
-		description: "Short one-sentence description",
-		lesson_slides: ["sample_file_path_1", "sample_file_path_2"],
-		questions:[{
-			question: "This is the first question",
-			hint: "This is the provided hint",
-			option1: "Answer",
-			option2: "Not the answer",
-			option3: "Not the answer",
-			option4: "Not the answer",
-			solution: 1
-		}, {
-			question: "This is the second question",
-			hint: "This is the provided hint",
-			option1: "Answer",
-			option2: "Not the answer",
-			option3: "Not the answer",
-			option4: "Not the answer",
-			solution: 1
-		}, {
-			question: "This is the third question",
-			hint: "This is the provided hint",
-			option1: "Answer",
-			option2: "Not the answer",
-			option3: "Not the answer",
-			option4: "Not the answer",
-			solution: 1
-		}]
-
-
-	}*/
-
-    //const AI = ai.map((course: Course): Course => ({ ...course }));
     quiz1 = level1Questions.questions.map((something: any): any => ({ ...something}));
 
 	private quizQuestionIndex = -1		//Defaults to -1, will be set to 0 once the quiz starts
@@ -98,11 +62,6 @@ export default class GameScene extends Phaser.Scene {
 	currentHidingSpot?: Phaser.GameObjects.Image;
 	beginAnimation?: boolean;
 	currentKeyframe?: string;
-	
-	
-	
-	
-	
 
     constructor() 
     {
@@ -119,7 +78,6 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('platform', 'assets/platform.png');
         this.load.image('obstacleForNow', 'assets/beach/obstacleForNow.png')
 
-        //Robby's code 
         this.load.image('answerBubble', 'assets/quiz/answer_bubble.png')
 		this.load.image('exitArrow', 'assets/quiz/exit_arrow')
 		this.load.image('hintButton', 'assets/quiz/hint.png')
@@ -227,22 +185,34 @@ export default class GameScene extends Phaser.Scene {
 		this.answer1 = this.add.text(200, 283, this.currentQuestion.option1, {
 			font: '32px Arial',
 			color: '#000',
-		}).setOrigin(0.5).setVisible(false).setScrollFactor(0);
+		})
+			.setOrigin(0.5)
+			.setVisible(false)
+			.setScrollFactor(0);
 
 		this.answer3 = this.add.text(605, 283, this.currentQuestion.option2, {
 			font: '32px Arial',
 			color: '#000'
-		}).setOrigin(0.5).setVisible(false).setScrollFactor(0);
+		})
+			.setOrigin(0.5)
+			.setVisible(false)
+			.setScrollFactor(0);
 
 		this.answer2 = this.add.text(200, 377, this.currentQuestion.option3, {
 			font: '32px Arial',
 			color: '#000'
-		}).setOrigin(0.5).setVisible(false).setScrollFactor(0);
+		})
+			.setOrigin(0.5)
+			.setVisible(false)
+			.setScrollFactor(0);
 
 		this.answer4 = this.add.text(605, 377, this.currentQuestion.option4, {
 			font: '32px Arial',
 			color: '#000'
-		}).setOrigin(0.5).setVisible(false).setScrollFactor(0);
+		})
+			.setOrigin(0.5)
+			.setVisible(false)
+			.setScrollFactor(0);
 
 		this.hintButton = this.add.image(710, 135, 'hintButton').setVisible(false).setScrollFactor(0);
 		this.hintButton.setInteractive()
@@ -281,12 +251,12 @@ export default class GameScene extends Phaser.Scene {
 		})
 
 		this.answerBubble2.on('pointerup', () => {
-			this.selectedOption = this.currentQuestion.option3
+			this.selectedOption = this.currentQuestion.option2
 			this.postQuestionScene()
 		})
 
 		this.answerBubble3.on('pointerup', () => {
-			this.selectedOption = this.currentQuestion.option2
+			this.selectedOption = this.currentQuestion.option3
 			this.postQuestionScene()
 		})
 
@@ -520,14 +490,10 @@ export default class GameScene extends Phaser.Scene {
 					this.currentEnemy.setFlipX(false)
 
 					if(this.selectedOption === "Hide in Log") {
-
 						this.showDialogBox("Phew, that was close!")
-
 					} else {
-
 						this.showDialogBox("Ouch, that hurt!")
 						this.setHealth(this.health - 10);
-
 					}
 
 					
@@ -554,7 +520,12 @@ export default class GameScene extends Phaser.Scene {
 					this.beginAnimation = false
 					this.currentEnemy.setFlipX(false)
 					this.resumeGameplay()
-					this.showDialogBox("Phew, that was close!")
+					if(this.selectedOption === "Hide in Sand") {
+						this.showDialogBox("Phew, that was close!")
+					} else {
+						this.showDialogBox("Ouch, that hurt!")
+						this.setHealth(this.health - 10);
+					}
 				}
 			}
 
@@ -566,7 +537,12 @@ export default class GameScene extends Phaser.Scene {
 					console.log("done")
 					this.beginAnimation = false
 					this.resumeGameplay()
-					this.showDialogBox("Phew, that was close!")
+					if(this.selectedOption === "Hide in Shell") {
+						this.showDialogBox("Phew, that was close!")
+					} else {
+						this.showDialogBox("Ouch, that hurt!")
+						this.setHealth(this.health - 10);
+					}
 				}
 
 			}
@@ -579,7 +555,12 @@ export default class GameScene extends Phaser.Scene {
 					console.log("done")
 					this.beginAnimation = false
 					this.resumeGameplay()
-					this.showDialogBox("Mmmmm, Yummy!")
+					if(this.selectedOption === "Eat it") {
+						this.showDialogBox("Mmmm, Yummy!")
+					} else {
+						this.showDialogBox("Ooooh I should've eaten that!")
+						this.setHealth(this.health - 10);
+					}
 				}
 
 			}
