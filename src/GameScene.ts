@@ -371,6 +371,7 @@ export default class GameScene extends Phaser.Scene {
 		} else {
 
 			this.quizEndTime = new Date()
+
 			//Print out how long the puzzle took to solve
 			console.log((this.quizEndTime!.getTime() - this.quizStartTime!.getTime()) / 1000. + " seconds")
 
@@ -457,23 +458,29 @@ export default class GameScene extends Phaser.Scene {
 	setHealth(newHealth: number) {
 		this.health = newHealth
 		this.healthBarText?.setText(`Health: ${this.health}`)
+
+		if(this.health <= 0) {
+			this.scene.start("loseScreen")
+		}
 	}
 
     update()
     {
+
+		if(this.player!.x >= 1500) {
+			this.scene.start("winScreen")
+		}
+		
         if(!this.cursors){
 			return;
 		}
 		
 		if(this.cursors?.left?.isDown && !this.pauseKeyboardControl){
 			this.player?.setVelocityX(-160);
-			//this.player?.anims.play('left', true)
 		}else if(this.cursors.right?.isDown && !this.pauseKeyboardControl){
 			this.player?.setVelocityX(160);
-			//this.player?.anims.play('right', true)
 		}else{
 			this.player?.setVelocityX(0);
-			//this.player?.anims.play('turn');
 		}
 
 		if(this.cursors.up?.isDown && this.player?.body.touching.down){
@@ -508,7 +515,7 @@ export default class GameScene extends Phaser.Scene {
 						this.showDialogBox("Phew, that was close!")
 					} else {
 						this.showDialogBox("Ouch, that hurt!")
-						this.setHealth(this.health - 10);
+						this.setHealth(this.health - 30);
 					}
 
 					
@@ -539,7 +546,7 @@ export default class GameScene extends Phaser.Scene {
 						this.showDialogBox("Phew, that was close!")
 					} else {
 						this.showDialogBox("Ouch, that hurt!")
-						this.setHealth(this.health - 10);
+						this.setHealth(this.health - 30);
 					}
 				}
 			}
@@ -556,7 +563,7 @@ export default class GameScene extends Phaser.Scene {
 						this.showDialogBox("Phew, that was close!")
 					} else {
 						this.showDialogBox("Ouch, that hurt!")
-						this.setHealth(this.health - 10);
+						this.setHealth(this.health - 30);
 					}
 				}
 
@@ -574,7 +581,7 @@ export default class GameScene extends Phaser.Scene {
 						this.showDialogBox("Mmmm, Yummy!")
 					} else {
 						this.showDialogBox("Ooooh I should've eaten that!")
-						this.setHealth(this.health - 10);
+						this.setHealth(this.health - 30);
 					}
 				}
 
@@ -592,7 +599,7 @@ export default class GameScene extends Phaser.Scene {
 						this.showDialogBox("Mmmm, Yummy!")
 					} else {
 						this.showDialogBox("Ooooh I should've eaten that!")
-						this.setHealth(this.health - 10);
+						this.setHealth(this.health - 30);
 					}
 				}
 
