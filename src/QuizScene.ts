@@ -1,5 +1,3 @@
-import Phaser, { Game } from 'phaser'
-
 export default class QuizScene extends Phaser.Scene {
 
 	//This is simply for testing purposes, but has the same structure that will be used in the final product.
