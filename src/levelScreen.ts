@@ -1,4 +1,5 @@
 import Phaser from 'phaser'
+import QuizScene from './QuizScene'
 //import Phaser, { Game } from 'phaser'
 
 export default class levelScreen extends Phaser.Scene {
@@ -7,11 +8,15 @@ export default class levelScreen extends Phaser.Scene {
     datatypeButton?: Phaser.GameObjects.Image
     indicesButton?: Phaser.GameObjects.Image
     conditionalsButton?: Phaser.GameObjects.Image
+    restartButton?: Phaser.GameObjects.Image
+    menuButton?: Phaser.GameObjects.Image
+
 
     constructor() 
     {
 	    super({ key: 'levelScreen' })
 	}
+
 
     preload() 
     {
@@ -50,12 +55,27 @@ export default class levelScreen extends Phaser.Scene {
 		this.add.image(375,350,'star')
 		this.add.image(475,350,'star')
 
-
-        this.add.image(290, 450, 'playnow2')
+        this.restartButton =  this.add.image(290, 450, 'playnow2');
         this.add.text(245, 435, 'Restart', { font: "bold 24px Arial", color: 'black'});
+        this.restartButton.setInteractive();
 
-        this.add.image(465, 450, 'playnow2')
+        this.restartButton.on('pointerup', () => {
+            this.scene.start("TitleScreen");
+		})
+
+
+        this.menuButton = this.add.image(465, 450, 'playnow2')
         this.add.text(435, 435, 'Menu', { font: "bold 24px Arial", color: 'black'});
+        this.menuButton.on('pointerup', () => {
+            this.scene.start("QuizScene");
+		})
+
+
+        //this.add.image(500, 550, 'playnow2')
+        //this.add.text(500, 435, this.awardedPoints, { font: "bold 24px Arial", color: 'black'});
+
+
+        
 
         // STAR SYSTEM
         /*

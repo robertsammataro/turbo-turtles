@@ -38,7 +38,7 @@ export default class QuizScene extends Phaser.Scene {
 	}
 
 	//Define the text fields that will need to be rendered for the quiz
-	private awardedPoints = 1000
+	private awardedPoints = 1000;
 	private totalPoints = 0
 	private quizQuestionIndex = -1		//Defaults to -1, will be set to 0 once the quiz starts
 	private currentQuestion = {			//Will be used to contain the current question
