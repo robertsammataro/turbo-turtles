@@ -82,6 +82,12 @@ export default class GameScene extends Phaser.Scene {
 	currentEnemy?: Phaser.GameObjects.Image;
 	currentHidingOption: string = ""
 
+	dialogBox?: Phaser.GameObjects.Image;
+	dialogBoxText?: Phaser.GameObjects.Text;
+	dialogBoxClose?: Phaser.GameObjects.Image;
+
+	pauseKeyboardControl?: boolean = false
+
     //Abbey's Code: 
     background?: Phaser.GameObjects.Image;
     private player?: Phaser.Physics.Arcade.Sprite;
@@ -91,6 +97,8 @@ export default class GameScene extends Phaser.Scene {
 	currentHidingSpot?: Phaser.GameObjects.Image;
 	beginAnimation?: boolean;
 	currentKeyframe?: string;
+	
+	
 	
 
     constructor() 
@@ -166,19 +174,29 @@ export default class GameScene extends Phaser.Scene {
 		this.quizQuestionIndex = 0;
 		this.currentQuestion = this.quiz1[this.quizQuestionIndex]
 
-        
-        //this.add.image(400, 62, 'backdrop')
-
-        //Indicate what question the user is currently on
-
-		
-        /*this.add.image(125, 50, 'longBubble')
-		this.add.image(300, 50, 'longBubble')*/
+		this.dialogBox = this.add.image(400, 90, 'backdrop')
+			.setVisible(false)
+			.setOrigin(0.5)
+			.setScrollFactor(0)
+		this.dialogBoxText = this.add.text(40, 40, "text not instantiated", {
+			font: 'bold 25px Georgia',
+			color: '#e3d684',
+			stroke: '#000',
+			strokeThickness: 3
+		})
+			.setScrollFactor(0)
+			.setVisible(false)
+		this.dialogBoxClose = this.add.image(700, 100, 'next')
+			.setVisible(false)
+			.setScrollFactor(0)
+			.setInteractive()
 
         this.questionNumber = this.add.text(58, 105, "Question " + String(this.quizQuestionIndex + 1), {
 			font: '28px Georgia',
 			color: '#000000'
-		}).setVisible(false).setScrollFactor(0);  
+		})
+			.setVisible(false)
+			.setScrollFactor(0);  
 
 		this.quizHealth = this.add.text(240, 108, `Health: ${this.totalPoints}`, {
 			font: '24px Georgia',
@@ -238,6 +256,10 @@ export default class GameScene extends Phaser.Scene {
 
 		this.nextButton = this.add.image(550, 440, 'next').setVisible(false).setScrollFactor(0)
 		this.nextButton.setInteractive()
+
+		this.dialogBoxClose.on('pointerup', () => {
+			this.closeDialogBox()
+		})
 
         //Controls what happens when the hint button is clicked 
 		this.hintButton.on('pointerup', () => {
@@ -323,16 +345,12 @@ export default class GameScene extends Phaser.Scene {
 		//Set what the turtle should turn into
 		if(this.selectedOption === "Hide in Log") {
 			this.currentHidingOption = "log"
-			console.log("LOG")
 		} else if (this.selectedOption === "Hide in Sand") {
 			this.currentHidingOption = "sand"
-			console.log("SAND")
 		} else if (this.selectedOption === "Hide in Shell") {
 			this.currentHidingOption = "shell"
-			console.log("SHELL")
 		} else if (this.selectedOption === "Eat it") {
 			this.currentHidingOption = "eat"
-			console.log("EAT")
 		} else {
 			console.log("ERROR")
 		}
@@ -342,6 +360,7 @@ export default class GameScene extends Phaser.Scene {
 			console.log(this.currentHidingOption)
 
 			this.player.setVisible(false)
+			this.pauseKeyboardControl = true
 			this.currentHidingSpot = this.add.image(this.player.x, this.player.y, this.currentHidingOption)
 			
 			//Set what keyframe to start at
@@ -392,14 +411,14 @@ export default class GameScene extends Phaser.Scene {
 	}
 
     private handleCollideObstacles(player: Phaser.GameObjects.GameObject, obstacle: Phaser.GameObjects.GameObject){
-        //console.log(this.cameras.main.worldView.x);
+
         const obstacle2 = obstacle as Phaser.Physics.Arcade.Image;
         obstacle2.disableBody(true, true);
-        //this.physics.pause();
-        //this.scene.start('QuizScene');
         if(!this.quizBubble?.visible){
+
+			this.pauseKeyboardControl = true
+
             this.quizBubble?.setVisible(true)
-            //this.closeButton?.setVisible(true)
             this.questionNumber?.setVisible(true);
             this.quizHealth?.setVisible(true);
             this.quizTitle?.setVisible(true);
@@ -408,7 +427,6 @@ export default class GameScene extends Phaser.Scene {
             this.answerBubble3?.setVisible(true);
             this.answerBubble4?.setVisible(true);
             this.hintButton?.setVisible(true);
-            //this.questionHint?.setVisible(true);
             this.answer1?.setVisible(true);
             this.answer2?.setVisible(true);
             this.answer3?.setVisible(true);
@@ -450,6 +468,24 @@ export default class GameScene extends Phaser.Scene {
 		}
 	}
 
+	showDialogBox(text: string) {
+
+		this.dialogBox?.setVisible(true)
+		this.dialogBoxText?.setText(text).setVisible(true)
+		this.dialogBoxClose?.setVisible(true)
+		this.pauseKeyboardControl = true
+
+	}
+
+	closeDialogBox() {
+
+		this.dialogBox?.setVisible(false)
+		this.dialogBoxText?.setVisible(false)
+		this.dialogBoxClose?.setVisible(false)
+		this.pauseKeyboardControl = false
+
+	}
+
 	private resumeGameplay() {
 
 		this.currentEnemy?.setVisible(false)
@@ -464,21 +500,22 @@ export default class GameScene extends Phaser.Scene {
         if(!this.cursors){
 			return;
 		}
-
-		if(this.cursors?.left?.isDown){
+		
+		if(this.cursors?.left?.isDown && !this.pauseKeyboardControl){
 			this.player?.setVelocityX(-160);
-			this.player?.anims.play('left', true)
-		}else if(this.cursors.right?.isDown){
+			//this.player?.anims.play('left', true)
+		}else if(this.cursors.right?.isDown && !this.pauseKeyboardControl){
 			this.player?.setVelocityX(160);
-			this.player?.anims.play('right', true)
+			//this.player?.anims.play('right', true)
 		}else{
 			this.player?.setVelocityX(0);
-			this.player?.anims.play('turn');
+			//this.player?.anims.play('turn');
 		}
 
 		if(this.cursors.up?.isDown && this.player?.body.touching.down){
 			this.player.setVelocityY(-330);
 		}
+		
         
 		//Handle the animations for the enemies
 		if(this.currentEnemy && this.beginAnimation && this.player) {
@@ -488,7 +525,6 @@ export default class GameScene extends Phaser.Scene {
 				if(this.currentEnemy.x < (this.player.x + 450)) {
 					this.currentEnemy.setX(this.currentEnemy.x += 4)
 				} else {
-					console.log("done")
 					this.currentEnemy.setFlipX(true)
 					this.currentKeyframe = "birdPassover2"
 				}
@@ -503,7 +539,7 @@ export default class GameScene extends Phaser.Scene {
 					this.beginAnimation = false
 					this.resumeGameplay()
 					this.currentEnemy.setFlipX(false)
-					console.log("done")
+					this.showDialogBox("Phew, that was close!")
 				}
 			}
 
@@ -527,7 +563,7 @@ export default class GameScene extends Phaser.Scene {
 					this.beginAnimation = false
 					this.currentEnemy.setFlipX(false)
 					this.resumeGameplay()
-					console.log("done")
+					this.showDialogBox("Phew, that was close!")
 				}
 			}
 
@@ -539,6 +575,7 @@ export default class GameScene extends Phaser.Scene {
 					console.log("done")
 					this.beginAnimation = false
 					this.resumeGameplay()
+					this.showDialogBox("Phew, that was close!")
 				}
 
 			}
@@ -551,6 +588,7 @@ export default class GameScene extends Phaser.Scene {
 					console.log("done")
 					this.beginAnimation = false
 					this.resumeGameplay()
+					this.showDialogBox("Mmmmm, Yummy!")
 				}
 
 			}
