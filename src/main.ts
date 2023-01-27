@@ -6,8 +6,9 @@ import Lesson1Screen from './Lesson1Screen'
 import Lesson2Screen from './Lesson2Screen'
 import Lesson3Screen from './Lesson3Screen'
 import GameScene from './GameScene'
-
-import levelScreen from './levelScreen'
+import loseScreen from './loseScreen'
+//import levelScreen from './levelScreen'
+import winScreen from './winScreen'
 
 
 const config: Phaser.Types.Core.GameConfig = {
@@ -21,7 +22,7 @@ const config: Phaser.Types.Core.GameConfig = {
 			gravity: { y: 300 },
 		},
 	},
-	scene: [TitleScreen, Lesson1Screen, QuizScene, Lesson2Screen, Lesson3Screen, levelScreen, GameScene],
+	scene: [TitleScreen, Lesson1Screen, QuizScene, Lesson2Screen, Lesson3Screen, winScreen, loseScreen, GameScene],
 }
 
 export default new Phaser.Game(config)

@@ -2,7 +2,7 @@ import Phaser from 'phaser'
 import QuizScene from './QuizScene'
 //import Phaser, { Game } from 'phaser'
 
-export default class levelScreen extends Phaser.Scene {
+export default class loseScreen extends Phaser.Scene {
 
     background?: Phaser.GameObjects.Image
     datatypeButton?: Phaser.GameObjects.Image
@@ -14,7 +14,7 @@ export default class levelScreen extends Phaser.Scene {
 
     constructor() 
     {
-	    super({ key: 'levelScreen' })
+	    super({ key: 'loseScreen' })
 	}
 
 
@@ -42,18 +42,19 @@ export default class levelScreen extends Phaser.Scene {
         //this.add.image(700,370,'turt')
 
         
-        this.add.text(30, 70, 'Congratulations!', { font: "bold 95px Arial", color: '#964B00' });
+        this.add.text(220, 70, 'Oh no!', { font: "bold 95px Arial", color: '#964B00' });
         //this.add.image(400, 350, 'playnow');
-        this.add.text(170, 170, 'You returned home safely', { font: "bold 32px Arial", color: 'black'});
-        this.add.text(130, 200, 'by using Conditional Statements', { font: "bold 32px Arial", color: 'black'});
-        this.add.text(170, 230, 'to avoid the danger on land!', { font: "bold 32px Arial", color: 'black'});
+
+        this.add.text(220, 170, 'You ran out of health!', { font: "bold 32px Arial", color: 'black'});
+        this.add.text(80, 200, 'You need to use your Conditional Statements ', { font: "bold 32px Arial", color: 'black'});
+        this.add.text(150, 230, 'correctly to avoid the danger on land!', { font: "bold 32px Arial", color: 'black'});
 
         this.add.text(220, 270, 'Total Stars Awarded:', { font: "bold 32px Arial", color: 'white'});
 
 
         this.add.image(275,350,'star')
-		this.add.image(375,350,'star')
-		this.add.image(475,350,'star')
+		this.add.image(375,350,'star').setTint(0)
+		this.add.image(475,350,'star').setTint(0)
 
         this.restartButton =  this.add.image(290, 450, 'playnow2');
         this.add.text(245, 435, 'Restart', { font: "bold 24px Arial", color: 'black'});
@@ -94,7 +95,6 @@ export default class levelScreen extends Phaser.Scene {
 			this.add.image(400,400,'star').setTint(0)
 			this.add.image(500,400,'star').setTint(0)
 		}
-
         */
         /*
         this.datatypeButton = this.add.image(400, 250, 'playnow');
