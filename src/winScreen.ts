@@ -1,7 +1,6 @@
 import Phaser from 'phaser'
 import GameScene from './GameScene'
 //import Phaser, { Game } from 'phaser'
-
 export default class winScreen extends Phaser.Scene {
 
     background?: Phaser.GameObjects.Image
@@ -51,26 +50,23 @@ export default class winScreen extends Phaser.Scene {
         this.add.text(220, 270, 'Total Stars Awarded:', { font: "bold 32px Arial", color: 'white'});
 
 
-        this.add.image(275,350,'star')
-		this.add.image(375,350,'star')
-		this.add.image(475,350,'star')
-
         this.restartButton =  this.add.image(290, 450, 'playnow2');
         this.add.text(245, 435, 'Restart', { font: "bold 24px Arial", color: 'black'});
         this.restartButton.setInteractive();
 
         this.restartButton.on('pointerup', () => {
-            this.scene.start("TitleScreen");
+            this.scene.start("GameScene");
 		})
 
 
         this.menuButton = this.add.image(465, 450, 'playnow2')
         this.add.text(435, 435, 'Menu', { font: "bold 24px Arial", color: 'black'});
+        this.menuButton.setInteractive();
         this.menuButton.on('pointerup', () => {
-            this.scene.start("QuizScene");
+            this.scene.start("TitleScreen");
 		})
 
-
+    
         ////////////////////////////////////////////////////////////////////////////////////
         //    THIS IS HOW YOU WILL BE ABLE TO SEE HOW LONG THE GAME SCENE TOOK TO RUN     //
         ////////////////////////////////////////////////////////////////////////////////////
@@ -85,23 +81,23 @@ export default class winScreen extends Phaser.Scene {
         
 
         // STAR SYSTEM
-        /*
-        if (this.timerCount < 10){
-			this.add.image(300,400,'star')
-			this.add.image(400,400,'star')
-			this.add.image(500,400,'star')
+        
+        if (GameScene.health >= 70){
+			this.add.image(275,350,'star')
+		    this.add.image(375,350,'star')
+		    this.add.image(475,350,'star')
 		}
-		else if ((this.timerCount > 10) && (this.timerCount < 20)){
-			this.add.image(300,400,'star')
-			this.add.image(400,400,'star')
-			this.add.image(500,400,'star').setTint(0)
+		else if ((GameScene.health<70) && (GameScene.health >= 40)){
+			this.add.image(275,350,'star')
+		    this.add.image(375,350,'star')
+		    this.add.image(475,350,'star').setTint(0)
 		}
 		else{
-			this.add.image(300,400,'star')
-			this.add.image(400,400,'star').setTint(0)
-			this.add.image(500,400,'star').setTint(0)
+			this.add.image(275,350,'star')
+		    this.add.image(375,350,'star').setTint(0)
+		    this.add.image(475,350,'star').setTint(0)
 		}
-        */
+        
         /*
         this.datatypeButton = this.add.image(400, 250, 'playnow');
         this.add.text(300, 225, 'Data Types', { font: "bold 40px Arial", color: 'black'});
