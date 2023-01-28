@@ -8,7 +8,7 @@
         "option1": "Hide in Log",
         "option2": "Hide in Shell",
         "option3": "Eat it",
-        "option4": "Hide in Sand",
+        "option4": "Burrow",
         "solution": 1
     }, {
         "question": "Watch out, there's a mongoose coming!\nWhere should we hide?",
@@ -16,23 +16,23 @@
         "option1": "Hide in Log",
         "option2": "Hide in Shell",
         "option3": "Eat it",
-        "option4": "Hide in Sand",
-        "solution": 4
+        "option4": "Burrow",
+        "solution": 2
     }, {
         "question": "Here comes a crab!\nWhat do we need to do?",
         "predator": "crab",
         "option1": "Hide in Log",
         "option2": "Hide in Shell",
         "option3": "Eat it",
-        "option4": "Hide in Sand",
-        "solution": 2
+        "option4": "Burrow",
+        "solution": 4
     }, {
         "question": "Hey, here's a slug!\nWhat should we do?",
         "predator":  "slug",
         "option1": "Hide in Log",
         "option2": "Hide in Shell",
         "option3": "Eat it",
-        "option4": "Hide in Sand",
+        "option4": "Burrow",
         "solution": 3
     }]
 
