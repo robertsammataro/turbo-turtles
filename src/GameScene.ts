@@ -3,6 +3,8 @@ import level1Questions from './Quizzes/Level1QuizQuestions.json'
 
 export default class GameScene extends Phaser.Scene {
 
+	public static totalTime: number = 0
+
     quiz1 = level1Questions.questions.map((something: any): any => ({ ...something}));
 
 	private quizQuestionIndex = -1		//Defaults to -1, will be set to 0 once the quiz starts
@@ -39,6 +41,7 @@ export default class GameScene extends Phaser.Scene {
 	quizStartTime?: Date
 	quizEndTime?: Date
     questionHint?: Phaser.GameObjects.Text
+	finishFlag?: Phaser.GameObjects.Image;
 
 	selectedOption: string = ""
 	currentEnemy?: Phaser.GameObjects.Image;
@@ -62,7 +65,7 @@ export default class GameScene extends Phaser.Scene {
 	currentHidingSpot?: Phaser.GameObjects.Image;
 	beginAnimation?: boolean;
 	currentKeyframe?: string;
-
+	
     constructor() 
     {
 	    super('GameScene')
@@ -76,7 +79,8 @@ export default class GameScene extends Phaser.Scene {
 			frameWidth:150, frameHeight: 150
 		});
         this.load.image('platform', 'assets/platform.png');
-        this.load.image('obstacleForNow', 'assets/beach/obstacleForNow.png')
+        this.load.image('obstacleForNow', 'assets/beach/event_icon.png')
+		this.load.image('finishFlag', 'assets/beach/finish_flag.png')
 
         this.load.image('answerBubble', 'assets/quiz/answer_bubble.png')
 		this.load.image('exitArrow', 'assets/quiz/exit_arrow')
@@ -169,8 +173,13 @@ export default class GameScene extends Phaser.Scene {
 			color: '#e3d684',
 			stroke: '#000',
 			strokeThickness: 3
-		}).setVisible(false).setScrollFactor(0);
+		})
+			.setVisible(false)
+			.setScrollFactor(0);
         
+		this.finishFlag = this.add.image(1500, 400, 'finishFlag')
+
+
         //Add the answer bubbles
 		this.answerBubble1 = this.add.image(200, 290, 'answerBubble').setVisible(false).setScrollFactor(0);
 		this.answerBubble2 = this.add.image(200, 385, 'answerBubble').setVisible(false).setScrollFactor(0);
@@ -368,19 +377,15 @@ export default class GameScene extends Phaser.Scene {
 			this.answer2?.setText(this.currentQuestion.option2)
 			this.answer3?.setText(this.currentQuestion.option3)
 			this.answer4?.setText(this.currentQuestion.option4)
-		} else {
-
-			this.quizEndTime = new Date()
-
-			//Print out how long the puzzle took to solve
-			console.log((this.quizEndTime!.getTime() - this.quizStartTime!.getTime()) / 1000. + " seconds")
-
-		}
-
+		} 
 
 	}
 
     private handleCollideObstacles(player: Phaser.GameObjects.GameObject, obstacle: Phaser.GameObjects.GameObject){
+
+		if(player){
+			
+		}
 
         const obstacle2 = obstacle as Phaser.Physics.Arcade.Image;
         obstacle2.disableBody(true, true);
@@ -468,6 +473,9 @@ export default class GameScene extends Phaser.Scene {
     {
 
 		if(this.player!.x >= 1500) {
+
+			this.quizEndTime = new Date()
+			GameScene.totalTime = ((this.quizEndTime!.getTime() - this.quizStartTime!.getTime()) / 1000.)
 			this.scene.start("winScreen")
 		}
 		

@@ -1,4 +1,5 @@
 import Phaser from 'phaser'
+import GameScene from './GameScene'
 //import Phaser, { Game } from 'phaser'
 
 export default class winScreen extends Phaser.Scene {
@@ -68,6 +69,13 @@ export default class winScreen extends Phaser.Scene {
         this.menuButton.on('pointerup', () => {
             this.scene.start("QuizScene");
 		})
+
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        //    THIS IS HOW YOU WILL BE ABLE TO SEE HOW LONG THE GAME SCENE TOOK TO RUN     //
+        ////////////////////////////////////////////////////////////////////////////////////
+
+        console.log(`THIS IS A TEST: ${GameScene.totalTime} seconds`)
 
 
         //this.add.image(500, 550, 'playnow2')
