@@ -368,16 +368,13 @@ export default class GameScene extends Phaser.Scene {
 
 	private advanceQuestions() {
 
-		this.quizQuestionIndex++;
-
-		if(this.quizQuestionIndex < this.quiz1.length) {
-			this.currentQuestion = this.quiz1[this.quizQuestionIndex]
-			this.quizTitle?.setText(this.currentQuestion.question)
-			this.answer1?.setText(this.currentQuestion.option1)
-			this.answer2?.setText(this.currentQuestion.option2)
-			this.answer3?.setText(this.currentQuestion.option3)
-			this.answer4?.setText(this.currentQuestion.option4)
-		} 
+		let newIndex: number = Math.floor((Math.random() * 4))
+		this.currentQuestion = this.quiz1[newIndex]
+		this.quizTitle?.setText(this.currentQuestion.question)
+		this.answer1?.setText(this.currentQuestion.option1)
+		this.answer2?.setText(this.currentQuestion.option2)
+		this.answer3?.setText(this.currentQuestion.option3)
+		this.answer4?.setText(this.currentQuestion.option4)
 
 	}
 
