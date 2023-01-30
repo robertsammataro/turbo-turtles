@@ -72,6 +72,7 @@ export default class winScreen extends Phaser.Scene {
         this.add.text(435, 435, 'Menu', { font: "bold 24px Arial", color: 'black'});
         this.menuButton.setInteractive();
         this.menuButton.on('pointerup', () => {
+            this.sound.stopAll();
             this.scene.start("TitleScreen");
 		})
 
