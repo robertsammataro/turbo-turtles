@@ -68,14 +68,16 @@ export default class loseScreen extends Phaser.Scene {
         this.restartButton.setInteractive();
 
         this.restartButton.on('pointerup', () => {
-            this.scene.start("TitleScreen");
+            this.scene.start("GameScene");
 		})
 
 
         this.menuButton = this.add.image(465, 450, 'playnow2')
         this.add.text(435, 435, 'Menu', { font: "bold 24px Arial", color: 'black'});
+        this.menuButton.setInteractive();
         this.menuButton.on('pointerup', () => {
-            this.scene.start("QuizScene");
+            this.sound.stopAll();
+            this.scene.start("TitleScreen");
 		})
 
 
