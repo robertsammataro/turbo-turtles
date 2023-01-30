@@ -65,6 +65,7 @@ export default class GameScene extends Phaser.Scene {
 	currentHidingSpot?: Phaser.GameObjects.Image;
 	beginAnimation?: boolean;
 	currentKeyframe?: string;
+	tutorial?:Phaser.GameObjects.Image;
 	
     constructor() 
     {
@@ -104,6 +105,8 @@ export default class GameScene extends Phaser.Scene {
 		this.load.image('log', 'assets/hiding/log.png')
 		this.load.image('sand', 'assets/hiding/sand.png')
 		this.load.image('shell', 'assets/hiding/turtle_shell.png')
+
+		this.load.image('tutorial','assets/lesson1/tutorial.png');
 	}
 
     create()
@@ -178,6 +181,7 @@ export default class GameScene extends Phaser.Scene {
 			.setScrollFactor(0);
         
 		this.finishFlag = this.add.image(1500, 400, 'finishFlag')
+		//
 
 
         //Add the answer bubbles
@@ -223,14 +227,16 @@ export default class GameScene extends Phaser.Scene {
 			.setVisible(false)
 			.setScrollFactor(0);
 
-		this.hintButton = this.add.image(710, 135, 'hintButton').setVisible(false).setScrollFactor(0);
+		this.hintButton = this.add.image(725, 60, 'hintButton').setVisible(false).setScrollFactor(0);
 		this.hintButton.setInteractive()
 
         //Initialize hintBubble and hide it
-		this.hintBubble = this.add.image(400, 350, 'hintBubble').setVisible(false).setScrollFactor(0)
+		this.hintBubble = this.add.image(400, 350,  'hintBubble').setVisible(false).setScrollFactor(0)
 		this.hintBubble.setInteractive()
 
-		this.closeButton = this.add.image(550, 440, 'close').setVisible(false).setScrollFactor(0)
+		this.tutorial = this.add.image(400,320, 'tutorial').setVisible(false).setScrollFactor(0);
+
+		this.closeButton = this.add.image(640, 490, 'close').setVisible(false).setScrollFactor(0)
 		this.closeButton.setInteractive()
 
 		this.correctBubble = this.add.image(400, 350, 'correctAnswer').setVisible(false).setScrollFactor(0)
@@ -238,6 +244,7 @@ export default class GameScene extends Phaser.Scene {
 
 		this.nextButton = this.add.image(550, 440, 'next').setVisible(false).setScrollFactor(0)
 		this.nextButton.setInteractive()
+
 
 		this.dialogBoxClose.on('pointerup', () => {
 			this.closeDialogBox()
@@ -248,7 +255,8 @@ export default class GameScene extends Phaser.Scene {
 			if(!this.hintBubble?.visible) {
 				this.hintBubble?.setVisible(true)
 				this.closeButton?.setVisible(true)
-				this.questionHint?.setVisible(true)
+				//this.questionHint?.setVisible(true)
+				this.tutorial?.setVisible(true);
 			}
 		})
 
@@ -285,8 +293,11 @@ export default class GameScene extends Phaser.Scene {
 			this.closeButton?.setVisible(false)
 			this.hintBubble?.setVisible(false)
 			this.questionHint?.setVisible(false)
+			this.tutorial?.setVisible(false);
+
 
 		})
+
         
     }
 
