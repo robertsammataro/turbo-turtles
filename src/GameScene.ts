@@ -65,7 +65,6 @@ export default class GameScene extends Phaser.Scene {
 	currentHidingSpot?: Phaser.GameObjects.Image;
 	beginAnimation?: boolean;
 	currentKeyframe?: string;
-	tutorial?:Phaser.GameObjects.Image;
 	
     constructor() 
     {
@@ -105,8 +104,6 @@ export default class GameScene extends Phaser.Scene {
 		this.load.image('log', 'assets/hiding/log.png')
 		this.load.image('sand', 'assets/hiding/sand.png')
 		this.load.image('shell', 'assets/hiding/turtle_shell.png')
-
-		this.load.image('tutorial','assets/lesson1/tutorial.png');
 	}
 
     create()
@@ -299,6 +296,32 @@ export default class GameScene extends Phaser.Scene {
 		})
 
         
+
+
+		// add music to game
+        this.backgroundMusic = this.sound.add('music');
+
+        // add music button on screen
+        this.musicButton = this.add.image(750, 30, 'musicOn').setScrollFactor(0);
+        this.musicButton.setInteractive();
+
+        //mute and unmute sound on music button click
+        this.musicButton?.on('pointerup', () => {
+
+            if (this.isMute == false)
+            {
+                this.isMute = true;
+                this.sound.stopAll();
+                this.musicOffButton = this.add.image(750, 30, 'musicOff').setScrollFactor(0);
+                this.musicOffButton.scale = 0.35;
+            }
+            else
+            {
+                this.isMute = false;
+                this.backgroundMusic?.play();
+                this.musicOffButton?.destroy();
+            }
+        })
     }
 
 	private postQuestionScene() {
