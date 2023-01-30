@@ -5,6 +5,12 @@ export default class Lesson3Screen extends Phaser.Scene {
     background?:Phaser.GameObjects.Image
     completeButton?: Phaser.GameObjects.Image
 
+    // music
+    musicButton?: Phaser.GameObjects.Image
+    musicOffButton?: Phaser.GameObjects.Image
+    backgroundMusic?: Phaser.Sound.BaseSound
+    isMute = false;
+
     constructor() 
     {
 	    super('Lesson3Screen')
@@ -17,6 +23,11 @@ export default class Lesson3Screen extends Phaser.Scene {
         this.load.image('teacherTurtle', 'assets/lessons/teacherTurtle.png');
         this.load.image('whiteboard', 'assets/lessons/whiteboard.png');
         this.load.image('skip', 'assets/lessons/button_wide.png');
+
+        // load SoundButton 
+        this.load.image('musicOn', 'assets/TitleScreen/musicOn.png');
+        this.load.image('musicOff', 'assets/TitleScreen/circleslash.png');
+        this.load.audio('music', 'assets/audio/BackgroudMusic.mp3');
 	}
 
     create()
@@ -41,6 +52,32 @@ export default class Lesson3Screen extends Phaser.Scene {
             this.scene.start('QuizScene');
         })
 
+
+        
+        // add music to game
+        this.backgroundMusic = this.sound.add('music');
+
+        // add music button on screen
+        this.musicButton = this.add.image(750, 30, 'musicOn');
+        this.musicButton.setInteractive();
+
+        //mute and unmute sound on music button click
+        this.musicButton?.on('pointerup', () => {
+
+            if (this.isMute == false)
+            {
+                this.isMute = true;
+                this.sound.stopAll();
+                this.musicOffButton = this.add.image(750, 30, 'musicOff');
+                this.musicOffButton.scale = 0.35;
+            }
+            else
+            {
+                this.isMute = false;
+                this.backgroundMusic?.play();
+                this.musicOffButton?.destroy();
+            }
+        })
     }
 
     update()
