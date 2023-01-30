@@ -65,6 +65,11 @@ export default class GameScene extends Phaser.Scene {
 	currentHidingSpot?: Phaser.GameObjects.Image;
 	beginAnimation?: boolean;
 	currentKeyframe?: string;
+	tutorial?: Phaser.GameObjects.Image;
+	backgroundMusic?: Phaser.Sound.BaseSound;
+	musicButton?: Phaser.GameObjects.Image;
+	isMute?: boolean;
+	musicOffButton?: Phaser.GameObjects.Image;
 	
     constructor() 
     {
@@ -224,7 +229,7 @@ export default class GameScene extends Phaser.Scene {
 			.setVisible(false)
 			.setScrollFactor(0);
 
-		this.hintButton = this.add.image(725, 60, 'hintButton').setVisible(false).setScrollFactor(0);
+		this.hintButton = this.add.image(725, 120, 'hintButton').setVisible(false).setScrollFactor(0);
 		this.hintButton.setInteractive()
 
         //Initialize hintBubble and hide it
