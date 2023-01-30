@@ -10,6 +10,11 @@ export default class loseScreen extends Phaser.Scene {
     restartButton?: Phaser.GameObjects.Image
     menuButton?: Phaser.GameObjects.Image
 
+    // music
+    musicButton?: Phaser.GameObjects.Image
+    musicOffButton?: Phaser.GameObjects.Image
+    backgroundMusic?: Phaser.Sound.BaseSound
+    isMute = false;
 
     constructor() 
     {
@@ -28,7 +33,10 @@ export default class loseScreen extends Phaser.Scene {
         this.load.image('ocean', 'assets/ocean.png');
         this.load.image('playnow2', 'assets/playnow2.png');
 
-
+        // load SoundButton 
+        this.load.image('musicOn', 'assets/TitleScreen/musicOn.png');
+        this.load.image('musicOff', 'assets/TitleScreen/circleslash.png');
+        this.load.audio('music', 'assets/audio/BackgroudMusic.mp3');
 	}
 
     create()
@@ -70,6 +78,31 @@ export default class loseScreen extends Phaser.Scene {
             this.scene.start("QuizScene");
 		})
 
+
+        // add music to game
+        this.backgroundMusic = this.sound.add('music');
+
+        // add music button on screen
+        this.musicButton = this.add.image(750, 30, 'musicOn');
+        this.musicButton.setInteractive();
+
+        //mute and unmute sound on music button click
+        this.musicButton?.on('pointerup', () => {
+
+            if (this.isMute == false)
+            {
+                this.isMute = true;
+                this.sound.stopAll();
+                this.musicOffButton = this.add.image(750, 30, 'musicOff');
+                this.musicOffButton.scale = 0.35;
+            }
+            else
+            {
+                this.isMute = false;
+                this.backgroundMusic?.play();
+                this.musicOffButton?.destroy();
+            }
+        })
 
         //this.add.image(500, 550, 'playnow2')
         //this.add.text(500, 435, this.awardedPoints, { font: "bold 24px Arial", color: 'black'});
