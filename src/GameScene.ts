@@ -463,6 +463,7 @@ export default class GameScene extends Phaser.Scene {
 
 		if(GameScene.health <= 0) {
 			this.scene.start("loseScreen")
+			this.setHealth(100);
 		}
 	}
 
@@ -473,6 +474,7 @@ export default class GameScene extends Phaser.Scene {
 
 			this.quizEndTime = new Date()
 			GameScene.totalTime = ((this.quizEndTime!.getTime() - this.quizStartTime!.getTime()) / 1000.)
+			this.setHealth(100);
 			this.scene.start("winScreen")
 		}
 		
